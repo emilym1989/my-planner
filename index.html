@@ -1808,39 +1808,7 @@ Notes:
     
   </section>
 
-  <!-- ===== IDEAS BANK ===== -->
-  <section id="ideas" class="section">
-    <h2 class="section-header">💡 Ideas Bank</h2>
-    <p style="color: var(--text-light); font-size: 14px; margin-bottom: 16px;">Dump your thoughts here. No commitment, just capture. ✨</p>
-
-    <div class="ideas-grid">
-      <div class="idea-category" style="border-top-color: var(--peach-deep);">
-        <h4>🍪 Hustle Ideas</h4>
-        <div contenteditable="true" class="editable-area" id="idea-hustle" oninput="save('idea-hustle', this.innerText)" style="min-height: 60px; font-size: 13px;"></div>
-      </div>
-      <div class="idea-category" style="border-top-color: var(--sage-deep);">
-        <h4>🏠 Family & Home Ideas</h4>
-        <div contenteditable="true" class="editable-area" id="idea-family" oninput="save('idea-family', this.innerText)" style="min-height: 60px; font-size: 13px;"></div>
-      </div>
-      <div class="idea-category" style="border-top-color: var(--sage-deep);">
-        <h4>💪 Health Ideas</h4>
-        <div contenteditable="true" class="editable-area" id="idea-health" oninput="save('idea-health', this.innerText)" style="min-height: 60px; font-size: 13px;"></div>
-      </div>
-      <div class="idea-category" style="border-top-color: var(--gold-deep);">
-        <h4>✝️ Spirituality Ideas</h4>
-        <div contenteditable="true" class="editable-area" id="idea-spirit" oninput="save('idea-spirit', this.innerText)" style="min-height: 60px; font-size: 13px;"></div>
-      </div>
-      <div class="idea-category" style="border-top-color: var(--blush-deep);">
-        <h4>🏡 Home Project Ideas</h4>
-        <div contenteditable="true" class="editable-area" id="idea-home" oninput="save('idea-home', this.innerText)" style="min-height: 60px; font-size: 13px;"></div>
-      </div>
-      <div class="idea-category" style="border-top-color: var(--lavender-deep);">
-        <h4>🎨 Hobby Ideas</h4>
-        <div contenteditable="true" class="editable-area" id="idea-hobbies" oninput="save('idea-hobbies', this.innerText)" style="min-height: 60px; font-size: 13px;"></div>
-      </div>
-    </div>
-  </section>
-
+ 
   <!-- ===== SIDE QUESTS ===== -->
   <section id="quests" class="section">
     <h2 class="section-header">🎲 Side Quest Ideas</h2>
@@ -1853,6 +1821,14 @@ Notes:
         <button class="btn btn-primary btn-sm" onclick="addQuest()">✦ Add</button>
       </div>
     </div>
+    <div class="card accent-gold">
+  <div class="card-header">
+    <div class="card-icon">💡</div>
+    <div><div class="card-title">Idea Drop Zone</div><div class="card-subtitle">Capture random thoughts, projects, or inspirations</div></div>
+  </div>
+  <div contenteditable="true" class="editable-area" id="mergedIdeas" oninput="save('mergedIdeas', this.innerText)" placeholder="Type any ideas here..."></div>
+</div>
+
   </section>
 
 </main>

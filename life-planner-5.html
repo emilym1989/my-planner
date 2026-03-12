@@ -1,0 +1,3330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Life Planner ✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blush: #F2B8C6;
+    --blush-light: #FDE8EF;
+    --blush-deep: #E8899E;
+    --lavender: #C9B8E8;
+    --lavender-light: #EDE8F7;
+    --lavender-deep: #9B85D4;
+    --sage: #B2CCAD;
+    --sage-light: #E4EEE2;
+    --sage-deep: #7FAD78;
+    --peach: #F5C9A8;
+    --peach-light: #FDF0E6;
+    --peach-deep: #E8955C;
+    --gold: #E8D5A3;
+    --gold-light: #FBF5E6;
+    --gold-deep: #C9A84C;
+    --sky: #A8D4E8;
+    --sky-light: #E6F4FB;
+    --sky-deep: #5AADD4;
+    --rose: #E8B4C8;
+    --rose-light: #FCF0F5;
+    --rose-deep: #C97A9B;
+    --mint: #A8E8D8;
+    --mint-light: #E6FBF6;
+    --mint-deep: #4ABFA0;
+    --cream: #FDF8F3;
+    --text-dark: #3D2E3A;
+    --text-mid: #6B5668;
+    --text-light: #9A8897;
+    --white: #FFFFFF;
+    --shadow-soft: 0 4px 20px rgba(180,140,170,0.12);
+    --shadow-card: 0 2px 12px rgba(180,140,170,0.10);
+    --radius: 20px;
+    --radius-sm: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(201,184,232,0.15) 0%, transparent 50%),
+      radial-gradient(circle at 90% 80%, rgba(242,184,198,0.12) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(178,204,173,0.08) 0%, transparent 70%);
+  }
+
+  /* HEADER */
+  .app-header {
+    background: linear-gradient(135deg, rgba(242,184,198,0.4), rgba(201,184,232,0.4), rgba(178,204,173,0.3));
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.6);
+    padding: 20px 24px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .app-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: var(--text-dark);
+    letter-spacing: -0.3px;
+  }
+
+  .app-title span { font-style: italic; color: var(--lavender-deep); }
+
+  .day-badge {
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .day-badge.full-kids { background: linear-gradient(135deg, var(--blush), var(--peach)); color: var(--text-dark); }
+  .day-badge.first-day { background: linear-gradient(135deg, var(--lavender), var(--blush)); color: var(--text-dark); }
+  .day-badge.transition { background: linear-gradient(135deg, var(--sage), var(--mint)); color: var(--text-dark); }
+  .day-badge.free-day { background: linear-gradient(135deg, var(--sage-light), var(--lavender-light)); color: var(--text-mid); border: 1.5px solid var(--sage); }
+
+  .date-display {
+    font-size: 13px;
+    color: var(--text-mid);
+    font-weight: 500;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+
+  .nav-tab {
+    padding: 7px 14px;
+    border-radius: 50px;
+    border: none;
+    background: rgba(255,255,255,0.6);
+    color: var(--text-mid);
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .nav-tab:hover { background: rgba(255,255,255,0.85); color: var(--text-dark); }
+  .nav-tab.active { background: white; color: var(--text-dark); box-shadow: var(--shadow-card); }
+
+  /* LAYOUT */
+  .app-body { padding: 20px 20px 60px; max-width: 900px; margin: 0 auto; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(255,255,255,0.8);
+    animation: fadeUp 0.3s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .card-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--text-dark);
+    font-weight: 600;
+  }
+
+  .card-subtitle {
+    font-size: 12px;
+    color: var(--text-light);
+    font-weight: 500;
+    margin-top: 1px;
+  }
+
+  /* SECTION ACCENT COLORS */
+  .accent-blush .card-icon { background: var(--blush-light); }
+  .accent-lavender .card-icon { background: var(--lavender-light); }
+  .accent-sage .card-icon { background: var(--sage-light); }
+  .accent-peach .card-icon { background: var(--peach-light); }
+  .accent-gold .card-icon { background: var(--gold-light); }
+  .accent-sky .card-icon { background: var(--sky-light); }
+  .accent-rose .card-icon { background: var(--rose-light); }
+  .accent-mint .card-icon { background: var(--mint-light); }
+
+  .section-header {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--text-dark);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* TOGGLES & INPUTS */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--blush-light);
+  }
+  .toggle-row:last-child { border-bottom: none; }
+
+  .toggle-label {
+    font-size: 14px;
+    color: var(--text-mid);
+    font-weight: 500;
+  }
+
+  .toggle {
+    width: 44px;
+    height: 24px;
+    background: #E0D8E8;
+    border-radius: 50px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.25s;
+    flex-shrink: 0;
+  }
+
+  .toggle.on { background: var(--lavender-deep); }
+
+  .toggle::after {
+    content: '';
+    width: 18px;
+    height: 18px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: left 0.25s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+
+  .toggle.on::after { left: 23px; }
+
+  input[type="text"], input[type="number"], textarea, select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #EDE8F0;
+    border-radius: var(--radius-sm);
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    background: var(--cream);
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--lavender-deep);
+    background: white;
+  }
+
+  .input-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .input-group { margin-bottom: 14px; }
+
+  /* BUTTONS */
+  .btn {
+    padding: 9px 18px;
+    border-radius: 50px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--lavender-deep), var(--blush-deep));
+    color: white;
+    box-shadow: 0 3px 12px rgba(155,133,212,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(155,133,212,0.4); }
+
+  .btn-soft {
+    background: var(--lavender-light);
+    color: var(--lavender-deep);
+  }
+  .btn-soft:hover { background: var(--lavender); }
+
+  .btn-sage {
+    background: var(--sage-light);
+    color: var(--sage-deep);
+  }
+
+  .btn-sm { padding: 6px 13px; font-size: 12px; }
+
+  /* CHECKLIST */
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .check-item:last-child { border-bottom: none; }
+
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid var(--lavender);
+    flex-shrink: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    margin-top: 1px;
+  }
+
+  .check-box.checked {
+    background: var(--lavender-deep);
+    border-color: var(--lavender-deep);
+  }
+  .check-box.checked::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; }
+
+  .check-text {
+    font-size: 14px;
+    color: var(--text-mid);
+    flex: 1;
+    line-height: 1.4;
+  }
+  .check-text.done { text-decoration: line-through; color: var(--text-light); }
+
+  .check-delete {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 4px;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .check-delete:hover { color: var(--blush-deep); }
+
+  /* ADD ITEM ROW */
+  .add-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .add-row input { flex: 1; }
+
+  /* METRICS GRID */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .metric-box {
+    background: var(--lavender-light);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    text-align: center;
+  }
+
+  .metric-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--lavender-deep);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .metric-label {
+    font-size: 11px;
+    color: var(--text-light);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* SCALE SELECTOR */
+  .scale-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .scale-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background: var(--lavender-light);
+    color: var(--text-mid);
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .scale-btn.selected {
+    border-color: var(--lavender-deep);
+    background: var(--lavender);
+  }
+
+  /* LOG ENTRIES */
+  .log-entry {
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    border-left: 3px solid var(--lavender);
+    position: relative;
+  }
+
+  .log-entry-date {
+    font-size: 11px;
+    color: var(--text-light);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .log-entry-text {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  .log-delete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  .log-delete:hover { color: var(--blush-deep); }
+
+  /* ROUTINE BLOCKS */
+  .routine-block {
+    background: var(--sage-light);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+
+  .routine-block h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--sage-deep);
+    margin-bottom: 8px;
+  }
+
+  /* WEEK OVERVIEW */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .week-day {
+    background: white;
+    border-radius: 12px;
+    padding: 10px 6px;
+    text-align: center;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .week-day.today { border-color: var(--lavender-deep); background: var(--lavender-light); }
+  .week-day.kids-day { background: var(--blush-light); }
+  .week-day.free-day-bg { background: var(--sage-light); }
+
+  .week-day-name { font-size: 10px; font-weight: 700; color: var(--text-light); text-transform: uppercase; }
+  .week-day-num { font-size: 20px; font-weight: 700; color: var(--text-dark); font-family: 'Playfair Display', serif; }
+  .week-day-type { font-size: 9px; color: var(--text-light); margin-top: 2px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-wrap {
+    background: var(--lavender-light);
+    border-radius: 50px;
+    height: 10px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--lavender-deep), var(--blush-deep));
+    transition: width 0.4s ease;
+  }
+
+  /* TAG */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    margin: 2px;
+  }
+
+  .tag-blush { background: var(--blush-light); color: var(--blush-deep); }
+  .tag-lavender { background: var(--lavender-light); color: var(--lavender-deep); }
+  .tag-sage { background: var(--sage-light); color: var(--sage-deep); }
+  .tag-gold { background: var(--gold-light); color: var(--gold-deep); }
+
+  /* VERSE CARD */
+  .verse-card {
+    background: linear-gradient(135deg, var(--gold-light), var(--peach-light));
+    border-radius: var(--radius);
+    padding: 22px;
+    text-align: center;
+    margin-bottom: 16px;
+    border: 1px solid var(--gold);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .verse-card::before {
+    content: '❝';
+    position: absolute;
+    top: -10px;
+    left: 12px;
+    font-size: 80px;
+    color: rgba(201,168,76,0.12);
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  .verse-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--text-dark);
+    line-height: 1.6;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .verse-ref {
+    font-size: 13px;
+    color: var(--gold-deep);
+    font-weight: 700;
+  }
+
+  /* CHART */
+  .weight-chart {
+    width: 100%;
+    height: 140px;
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    margin-top: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .chart-svg { width: 100%; height: 100%; }
+
+  /* IDEAS BANK */
+  .ideas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .idea-category {
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    border-top: 3px solid var(--lavender);
+  }
+
+  .idea-category h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-mid);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* PREGNANCY WEEK BANNER */
+  .preg-banner {
+    background: linear-gradient(135deg, var(--rose-light), var(--peach-light));
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--rose);
+  }
+
+  .preg-week-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    color: var(--rose-deep);
+    line-height: 1;
+  }
+
+  .preg-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+  }
+
+  .preg-info p {
+    font-size: 13px;
+    color: var(--text-mid);
+  }
+
+  /* APPOINTMENT */
+  .appt-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+  }
+
+  .appt-date-box {
+    background: var(--rose-light);
+    border-radius: 10px;
+    padding: 6px 10px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .appt-month { font-size: 10px; font-weight: 700; color: var(--rose-deep); text-transform: uppercase; }
+  .appt-day { font-size: 22px; font-family: 'Playfair Display', serif; color: var(--rose-deep); line-height: 1; }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--lavender), transparent);
+    margin: 16px 0;
+  }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* SIDE QUEST */
+  .quest-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--lavender-light);
+    border-radius: 10px;
+    margin-bottom: 6px;
+  }
+
+  .quest-star { color: var(--gold-deep); font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .quest-text { font-size: 14px; color: var(--text-mid); flex: 1; }
+
+  .editable-area {
+    min-height: 80px;
+    padding: 12px;
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    border: 1.5px solid #EDE8F0;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    outline: none;
+    line-height: 1.6;
+  }
+  .editable-area:focus { border-color: var(--lavender-deep); background: white; }
+  .child-hero {
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .child-avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+  .child-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text-dark);
+    line-height: 1;
+  }
+  .child-sub {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-top: 3px;
+  }
+  .food-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 3px;
+    cursor: default;
+  }
+  .food-tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    color: inherit;
+    opacity: 0.5;
+    padding: 0;
+    line-height: 1;
+    margin-left: 2px;
+  }
+  .food-tag button:hover { opacity: 1; }
+  .food-cat-protein { background: #FDE8E8; color: #C0534A; }
+  .food-cat-carb    { background: #FDF5E0; color: #B8860B; }
+  .food-cat-fruit   { background: #FFE8F0; color: #C0546E; }
+  .food-cat-veggie  { background: var(--sage-light); color: var(--sage-deep); }
+  .food-cat-dairy   { background: var(--lavender-light); color: var(--lavender-deep); }
+  .food-cat-snack   { background: var(--peach-light); color: var(--peach-deep); }
+  .food-cat-drink   { background: var(--sky-light); color: var(--sky-deep); }
+  .food-group-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    margin: 10px 0 4px;
+  }
+  .accent-sky .card-icon { background: var(--sky-light); }
+
+  /* ── CALENDAR ── */
+  .cal-grid-month {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+  }
+  .cal-day-header {
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-light);
+    text-transform: uppercase;
+    padding: 4px 0;
+  }
+  .cal-cell {
+    min-height: 52px;
+    border-radius: 10px;
+    padding: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .cal-cell:hover { background: var(--lavender-light); }
+  .cal-cell.today { background: var(--lavender-light); outline: 2px solid var(--lavender-deep); }
+  .cal-cell.selected { background: var(--lavender); }
+  .cal-cell.other-month { opacity: 0.35; }
+  .cal-cell.kids-bg { background: rgba(242,184,198,0.15); }
+  .cal-cell.free-bg { background: rgba(178,204,173,0.12); }
+  .cal-num {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .cal-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 1px;
+  }
+  .cal-dot.lavender { background: var(--lavender-deep); }
+  .cal-dot.blush    { background: var(--blush-deep); }
+  .cal-dot.sage     { background: var(--sage-deep); }
+  .cal-dot.peach    { background: var(--peach-deep); }
+  .cal-dot.gold     { background: var(--gold-deep); }
+
+  .cal-week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+  }
+  .cal-week-cell {
+    border-radius: 12px;
+    padding: 8px 4px;
+    min-height: 80px;
+    background: var(--cream);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .cal-week-cell:hover { background: var(--lavender-light); }
+  .cal-week-cell.today { background: var(--lavender-light); outline: 2px solid var(--lavender-deep); }
+  .cal-week-cell.selected { background: var(--lavender); }
+  .cal-week-day-name { font-size: 10px; font-weight: 700; color: var(--text-light); text-transform: uppercase; text-align:center; }
+  .cal-week-num { font-size: 18px; font-family: 'Playfair Display', serif; color: var(--text-dark); text-align: center; margin: 2px 0; }
+  .cal-week-events { display:flex; flex-direction:column; gap:2px; margin-top:2px; }
+  .cal-week-event {
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 2px 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cal-event-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    position: relative;
+  }
+  .cal-event-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .cal-event-time { font-size: 11px; font-weight: 700; color: var(--text-light); min-width: 36px; }
+  .cal-event-name { font-size: 14px; color: var(--text-mid); flex: 1; }
+
+
+  .day-pill {
+    padding: 5px 10px;
+    border-radius: 50px;
+    border: 1.5px solid var(--blush);
+    background: white;
+    color: var(--text-mid);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+  }
+  .day-pill.selected {
+    background: var(--blush-deep);
+    border-color: var(--blush-deep);
+    color: white;
+  }
+
+  .chore-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--blush-light);
+  }
+  .chore-item:last-child { border-bottom: none; }
+  .chore-days-display {
+    font-size: 11px;
+    color: var(--text-light);
+    font-weight: 700;
+  }
+
+  /* HUSTLE INCOME */
+  .income-display {
+    background: linear-gradient(135deg, var(--sage-light), var(--mint-light));
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .income-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: var(--sage-deep);
+  }
+
+  .income-goal { font-size: 12px; color: var(--text-light); }
+
+  /* BETTY */
+  .betty-emoji {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  /* TODAY SUMMARY */
+  .today-summary {
+    background: linear-gradient(135deg, rgba(201,184,232,0.2), rgba(242,184,198,0.2));
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(201,184,232,0.3);
+  }
+
+  .today-greeting {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    margin-bottom: 6px;
+    color: var(--text-dark);
+  }
+
+  .today-summary-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .summary-chip {
+    background: white;
+    border-radius: 50px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-mid);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* TRANSITIONS */
+  .section { animation: none; }
+  .section.active { animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239A8897' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+
+  .pill-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .pill-tab {
+    padding: 6px 14px;
+    border-radius: 50px;
+    border: none;
+    background: var(--cream);
+    color: var(--text-mid);
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .pill-tab.active {
+    background: var(--lavender-deep);
+    color: white;
+  }
+
+  .pill-content { display: none; }
+  .pill-content.active { display: block; }
+
+  .empty-state {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-light);
+    font-size: 14px;
+  }
+
+  .empty-state .empty-icon { font-size: 32px; margin-bottom: 8px; display: block; }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    background: var(--lavender-light);
+    border-radius: 50px;
+    outline: none;
+    margin: 10px 0;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--lavender-deep);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-top">
+    <div>
+      <div class="app-title">my <span>life planner</span> ✨</div>
+      <div class="date-display" id="dateDisplay"></div>
+    </div>
+    <div class="day-badge" id="dayBadge"></div>
+  </div>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('today', this)">🌅 Today</button>
+    <button class="nav-tab" onclick="showSection('hustle', this)">💼 Hustle Hub</button>
+    <button class="nav-tab" onclick="showSection('family', this)">🏠 Family & Home</button>
+    <button class="nav-tab" onclick="showSection('kids', this)">👧🏻 Kids</button>
+    <button class="nav-tab" onclick="showSection('pregnancy', this)">🤰 Pregnancy</button>
+    <button class="nav-tab" onclick="showSection('faith', this)">✝️ Faith</button>
+    <button class="nav-tab" onclick="showSection('wellness', this)">💪 Wellness</button>
+    <button class="nav-tab" onclick="showSection('betty', this)">🐾 Betty</button>
+    <button class="nav-tab" onclick="showSection('ideas', this)">💡 Ideas Bank</button>
+    <button class="nav-tab" onclick="showSection('quests', this)">🎲 Side Quests</button>
+  </nav>
+</header>
+
+<main class="app-body">
+
+  <!-- ===== TODAY ===== -->
+  <section id="today" class="section active">
+    <div class="today-summary" id="todaySummary"></div>
+
+    <div class="card accent-blush">
+      <div class="card-header">
+        <div class="card-icon">📅</div>
+        <div>
+          <div class="card-title">Day Toggles</div>
+          <div class="card-subtitle">Customize today's specifics</div>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">🎒 Gigi has school today</span>
+        <div class="toggle" id="tog-gigiSchool" onclick="toggleSwitch(this, 'gigiSchool')"></div>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">🧩 Gigi has ACES today</span>
+        <div class="toggle" id="tog-aces" onclick="toggleSwitch(this, 'aces')"></div>
+      </div>
+      <div class="toggle-row" id="aces-location-row" style="display:none;">
+        <span class="toggle-label">📍 ACES Location</span>
+        <div style="display:flex; gap:6px;">
+          <button id="aces-btn-home" class="btn btn-sm" onclick="setAcesLocation('home')" style="background:var(--sage-light);color:var(--sage-deep);">🏠 Home</button>
+          <button id="aces-btn-away" class="btn btn-sm" onclick="setAcesLocation('away')" style="background:var(--lavender-light);color:var(--lavender-deep);">🚗 Away</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">🏫 Leo has aftercare today</span>
+        <div class="toggle" id="tog-aftercare" onclick="toggleSwitch(this, 'aftercare')"></div>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">🏖️ Holiday / No School override</span>
+        <div class="toggle" id="tog-holiday" onclick="toggleSwitch(this, 'holiday')"></div>
+      </div>
+    </div>
+
+    <div class="card accent-lavender">
+      <div class="card-header">
+        <div class="card-icon">🗓️</div>
+        <div>
+          <div class="card-title">This Week</div>
+          <div class="card-subtitle">Your 2-2-3 cycle at a glance</div>
+        </div>
+      </div>
+      <div class="week-grid" id="weekGrid"></div>
+    </div>
+
+    <div class="card accent-sage" id="dailyFocusCard">
+      <div class="card-header">
+        <div class="card-icon">🌿</div>
+        <div>
+          <div class="card-title">Today's Focus</div>
+          <div class="card-subtitle">Smart suggestions for your day type</div>
+        </div>
+      </div>
+      <div id="dailyFocusContent"></div>
+    </div>
+
+    <div class="card accent-peach">
+      <div class="card-header">
+        <div class="card-icon">📝</div>
+        <div>
+          <div class="card-title">Today's To-Dos</div>
+          <div class="card-subtitle">What needs to happen today</div>
+        </div>
+      </div>
+      <div id="todayTodos"></div>
+      <div class="add-row">
+        <input type="text" id="newTodayTodo" placeholder="Add a task..." onkeydown="if(event.key==='Enter')addTodayTodo()">
+        <button class="btn btn-soft btn-sm" onclick="addTodayTodo()">+ Add</button>
+      </div>
+    </div>
+
+    <div class="card accent-gold">
+      <div class="card-header">
+        <div class="card-icon">🙏</div>
+        <div>
+          <div class="card-title">Today's Intention</div>
+          <div class="card-subtitle">Set the tone for your day</div>
+        </div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">One Word for Today</label>
+        <input type="text" id="dayWord" placeholder="e.g. Grounded, Joyful, Present..." oninput="save('dayWord', this.value)" maxlength="30">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Today I'm Grateful For...</label>
+        <textarea rows="2" id="dailyGratitude" placeholder="Write anything..." oninput="save('dailyGratitude', this.value)"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HUSTLE HUB ===== -->
+  <section id="hustle" class="section">
+    <h2 class="section-header">💼 Hustle Hub</h2>
+
+    <!-- COOKIES -->
+    <div class="card accent-peach">
+      <div class="card-header">
+        <div class="card-icon">🍪</div>
+        <div>
+          <div class="card-title">Cookie Business</div>
+          <div class="card-subtitle" style="color: var(--peach-deep); font-weight: 700;">TOP PRIORITY</div>
+        </div>
+      </div>
+      <div class="income-display">
+        <div>
+          <div class="income-goal">Weekly Goal</div>
+          <div class="income-amount">$<span id="cookieGoalDisplay">0</span></div>
+        </div>
+        <div>
+          <div class="income-goal">Earned This Week</div>
+          <div class="income-amount" style="color: var(--sage-deep);">$<span id="cookieEarned">0</span></div>
+        </div>
+        <button class="btn btn-sage btn-sm" onclick="editCookieIncome()">✏️ Edit</button>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Active Orders</label>
+        <div id="cookieOrders"></div>
+        <div class="add-row">
+          <input type="text" id="newOrder" placeholder="e.g. 2 dozen chocolate chip — due Fri...">
+          <button class="btn btn-soft btn-sm" onclick="addOrder()">+ Add</button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="input-group">
+        <label class="input-label">This Week's To-Dos</label>
+        <div id="cookieTodos"></div>
+        <div class="add-row">
+          <input type="text" id="newCookieTodo" placeholder="Baking day, supply run, photos..." onkeydown="if(event.key==='Enter')addCookieTodo()">
+          <button class="btn btn-soft btn-sm" onclick="addCookieTodo()">+ Add</button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="input-group">
+        <label class="input-label">📅 Baking Days This Week</label>
+        <div class="add-row">
+          <input type="text" id="bakingDays" placeholder="e.g. Tuesday and Thursday" oninput="save('bakingDays', this.value)">
+        </div>
+      </div>
+    </div>
+
+    <!-- DOORDASH -->
+    <div class="card accent-sage">
+      <div class="card-header">
+        <div class="card-icon">🚗</div>
+        <div>
+          <div class="card-title">DoorDash</div>
+          <div class="card-subtitle" style="color: var(--sage-deep); font-weight: 700;">SECOND PRIORITY</div>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="input-group">
+          <label class="input-label">Target Hours / Week</label>
+          <input type="number" id="ddHoursGoal" placeholder="e.g. 15" oninput="save('ddHoursGoal', this.value)">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Earnings Goal</label>
+          <input type="number" id="ddEarningsGoal" placeholder="e.g. 250" oninput="save('ddEarningsGoal', this.value)">
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="input-group">
+          <label class="input-label">Hours Logged This Week</label>
+          <input type="number" id="ddHoursActual" placeholder="0" oninput="save('ddHoursActual', this.value)">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Earned This Week</label>
+          <input type="number" id="ddEarned" placeholder="0" oninput="save('ddEarned', this.value)">
+        </div>
+      </div>
+      <label class="input-label">Best Dash Windows This Week</label>
+      <textarea rows="2" id="ddWindows" placeholder="e.g. Tuesday 5–9pm, Saturday lunch..." oninput="save('ddWindows', this.value)"></textarea>
+    </div>
+
+    <!-- COACHING -->
+    <div class="card accent-lavender">
+      <div class="card-header">
+        <div class="card-icon">🎯</div>
+        <div>
+          <div class="card-title">Coaching Practice</div>
+          <div class="card-subtitle" style="color: var(--lavender-deep); font-weight: 700;">REBUILDING — THIRD PRIORITY</div>
+        </div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Current Clients</label>
+        <div id="coachingClients"></div>
+        <div class="add-row">
+          <input type="text" id="newClient" placeholder="Client name / notes...">
+          <button class="btn btn-soft btn-sm" onclick="addClient()">+ Add</button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="input-group">
+        <label class="input-label">This Week's Outreach & Goals</label>
+        <div id="coachingTodos"></div>
+        <div class="add-row">
+          <input type="text" id="newCoachingTodo" placeholder="DM 3 people, update website..." onkeydown="if(event.key==='Enter')addCoachingTodo()">
+          <button class="btn btn-soft btn-sm" onclick="addCoachingTodo()">+ Add</button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="input-group">
+        <label class="input-label">Weekly Coaching Goal</label>
+        <textarea rows="2" id="coachingWeekGoal" placeholder="What's the focus this week?" oninput="save('coachingWeekGoal', this.value)"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAMILY & HOME ===== -->
+  <section id="family" class="section">
+    <h2 class="section-header">🏠 Family & Home</h2>
+
+    <div class="card accent-sage">
+      <div class="card-header">
+        <div class="card-icon">🍽️</div>
+        <div><div class="card-title">Meal Plan This Week</div></div>
+      </div>
+      <div id="mealPlan">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div class="input-group"><label class="input-label">Monday</label><input type="text" id="meal-mon" placeholder="Dinner idea..." oninput="save('meal-mon', this.value)"></div>
+          <div class="input-group"><label class="input-label">Tuesday</label><input type="text" id="meal-tue" placeholder="Dinner idea..." oninput="save('meal-tue', this.value)"></div>
+          <div class="input-group"><label class="input-label">Wednesday</label><input type="text" id="meal-wed" placeholder="Dinner idea..." oninput="save('meal-wed', this.value)"></div>
+          <div class="input-group"><label class="input-label">Thursday</label><input type="text" id="meal-thu" placeholder="Dinner idea..." oninput="save('meal-thu', this.value)"></div>
+          <div class="input-group"><label class="input-label">Friday</label><input type="text" id="meal-fri" placeholder="Dinner idea..." oninput="save('meal-fri', this.value)"></div>
+          <div class="input-group"><label class="input-label">Weekend</label><input type="text" id="meal-wknd" placeholder="Dinner idea..." oninput="save('meal-wknd', this.value)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card accent-blush">
+      <div class="card-header">
+        <div class="card-icon">🧹</div>
+        <div>
+          <div class="card-title">Chore Schedule</div>
+          <div class="card-subtitle">Assigned chores auto-appear in Today's To-Dos ✨</div>
+        </div>
+      </div>
+      <div id="choreScheduleList"></div>
+      <div style="margin-top:12px; background:var(--blush-light); border-radius:var(--radius-sm); padding:14px;">
+        <div class="input-label" style="margin-bottom:8px;">➕ Add a Chore</div>
+        <div class="input-group">
+          <input type="text" id="newChoreName" placeholder="Chore name (e.g. Vacuum living room)">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Repeat on</label>
+          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:4px;" id="newChoreDays">
+            <button class="day-pill" data-day="0" onclick="toggleDayPill(this)">Sun</button>
+            <button class="day-pill" data-day="1" onclick="toggleDayPill(this)">Mon</button>
+            <button class="day-pill" data-day="2" onclick="toggleDayPill(this)">Tue</button>
+            <button class="day-pill" data-day="3" onclick="toggleDayPill(this)">Wed</button>
+            <button class="day-pill" data-day="4" onclick="toggleDayPill(this)">Thu</button>
+            <button class="day-pill" data-day="5" onclick="toggleDayPill(this)">Fri</button>
+            <button class="day-pill" data-day="6" onclick="toggleDayPill(this)">Sat</button>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addScheduledChore()" style="margin-top:4px;">+ Add Chore</button>
+      </div>
+    </div>
+
+    <div class="card accent-lavender" style="padding:0; overflow:hidden;">
+      <div style="padding:22px 22px 16px;">
+        <div class="card-header" style="margin-bottom:0;">
+          <div class="card-icon">📅</div>
+          <div style="flex:1;"><div class="card-title">Family Calendar</div></div>
+          <div style="display:flex;gap:6px;">
+            <button class="pill-tab active" id="cal-tab-month" onclick="switchCalView('month')">Month</button>
+            <button class="pill-tab" id="cal-tab-week" onclick="switchCalView('week')">Week</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Month nav -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0 22px 12px;">
+        <button class="btn btn-soft btn-sm" onclick="calNav(-1)">‹</button>
+        <div id="calTitle" style="font-family:'Playfair Display',serif;font-size:17px;color:var(--text-dark);font-weight:600;"></div>
+        <button class="btn btn-soft btn-sm" onclick="calNav(1)">›</button>
+      </div>
+
+      <!-- Calendar grid -->
+      <div id="calGrid" style="padding:0 12px 12px;"></div>
+
+      <!-- Events for selected day -->
+      <div id="calDayDetail" style="padding:0 22px 16px; min-height:40px;"></div>
+
+      <!-- Add event -->
+      <div style="padding:12px 22px 22px; background:var(--lavender-light); border-top:1px solid rgba(201,184,232,0.3);">
+        <div class="input-label" style="margin-bottom:8px;">➕ Add Event</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input type="date" id="newEventDate" style="flex:1;min-width:130px;">
+          <input type="text" id="newEventTime" placeholder="Time (e.g. 2pm)" style="width:100px;">
+          <input type="text" id="newEventTitle" placeholder="Event name..." style="flex:2;min-width:160px;" onkeydown="if(event.key==='Enter')addCalEvent()">
+          <select id="newEventColor" style="width:auto;padding:8px 28px 8px 10px;">
+            <option value="lavender">💜 General</option>
+            <option value="blush">🩷 Kids</option>
+            <option value="sage">💚 Health</option>
+            <option value="peach">🧡 Hustle</option>
+            <option value="gold">💛 Faith</option>
+          </select>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addCalEvent()" style="margin-top:10px;">+ Add to Calendar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== KIDS ===== -->
+  <section id="kids" class="section">
+    <h2 class="section-header">👧🏻 Kids</h2>
+
+    <!-- Child sub-tabs -->
+    <div class="pill-tabs" style="margin-bottom:20px;">
+      <button class="pill-tab active" id="kid-tab-gigi" onclick="switchKidTab('gigi')">🌸 Gigi</button>
+      <button class="pill-tab" id="kid-tab-leo" onclick="switchKidTab('leo')">⚡ Leo</button>
+      <button class="pill-tab" id="kid-tab-routines" onclick="switchKidTab('routines')">📋 Routines</button>
+    </div>
+
+    <!-- ── GIGI ── -->
+    <div id="kid-panel-gigi" class="kid-panel">
+
+      <div class="child-hero" style="background: linear-gradient(135deg, var(--blush-light), var(--lavender-light)); border: 1px solid var(--blush);">
+        <div class="child-avatar" style="background: var(--blush);">🌸</div>
+        <div>
+          <div class="child-name">Gigi</div>
+          <div class="child-sub">Your girl ✨</div>
+        </div>
+      </div>
+
+      <!-- Safe Foods -->
+      <div class="card accent-sage">
+        <div class="card-header">
+          <div class="card-icon">🥦</div>
+          <div>
+            <div class="card-title">Gigi's Safe Foods</div>
+            <div class="card-subtitle">Foods she will eat — update anytime</div>
+          </div>
+        </div>
+        <div id="gigiSafeFoods"></div>
+        <div class="add-row" style="margin-top:10px;">
+          <input type="text" id="newGigiFood" placeholder="Add a safe food..." onkeydown="if(event.key==='Enter')addSafeFood('gigi')">
+          <select id="newGigiFoodCat" style="width:auto;padding:8px 28px 8px 10px;font-size:13px;">
+            <option value="protein">🥩 Protein</option>
+            <option value="carb">🍞 Carbs</option>
+            <option value="fruit">🍓 Fruit</option>
+            <option value="veggie">🥦 Veggie</option>
+            <option value="dairy">🧀 Dairy</option>
+            <option value="snack">🍿 Snack</option>
+            <option value="drink">🥤 Drink</option>
+          </select>
+          <button class="btn btn-sage btn-sm" onclick="addSafeFood('gigi')">+ Add</button>
+        </div>
+      </div>
+
+      <!-- ACES & School Notes -->
+      <div class="card accent-lavender">
+        <div class="card-header">
+          <div class="card-icon">🧩</div>
+          <div>
+            <div class="card-title">ACES & School Notes</div>
+            <div class="card-subtitle">Autism support details, contacts, sensory notes</div>
+          </div>
+        </div>
+        <div contenteditable="true" class="editable-area" id="gigiNotes" oninput="save('gigiNotes', this.innerText)">ACES Program: ___________
+Schedule: ___________
+Aide contact: ___________
+
+Sensory notes:
+What helps on hard days:
+        </div>
+      </div>
+
+      <!-- General Notes -->
+      <div class="card accent-blush">
+        <div class="card-header">
+          <div class="card-icon">📓</div>
+          <div>
+            <div class="card-title">Gigi's Notes</div>
+            <div class="card-subtitle">Anything you want to remember</div>
+          </div>
+        </div>
+        <div contenteditable="true" class="editable-area" id="gigiGeneralNotes" oninput="save('gigiGeneralNotes', this.innerText)">Medical info, therapist contacts, things that are working, wins to celebrate...
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── LEO ── -->
+    <div id="kid-panel-leo" class="kid-panel" style="display:none;">
+
+      <div class="child-hero" style="background: linear-gradient(135deg, var(--sky-light), var(--sage-light)); border: 1px solid var(--sky);">
+        <div class="child-avatar" style="background: var(--sky);">⚡</div>
+        <div>
+          <div class="child-name">Leo</div>
+          <div class="child-sub">Your boy ✨</div>
+        </div>
+      </div>
+
+      <!-- Safe Foods -->
+      <div class="card accent-peach">
+        <div class="card-header">
+          <div class="card-icon">🥦</div>
+          <div>
+            <div class="card-title">Leo's Safe Foods</div>
+            <div class="card-subtitle">Foods he will eat — update anytime</div>
+          </div>
+        </div>
+        <div id="leoSafeFoods"></div>
+        <div class="add-row" style="margin-top:10px;">
+          <input type="text" id="newLeoFood" placeholder="Add a safe food..." onkeydown="if(event.key==='Enter')addSafeFood('leo')">
+          <select id="newLeoFoodCat" style="width:auto;padding:8px 28px 8px 10px;font-size:13px;">
+            <option value="protein">🥩 Protein</option>
+            <option value="carb">🍞 Carbs</option>
+            <option value="fruit">🍓 Fruit</option>
+            <option value="veggie">🥦 Veggie</option>
+            <option value="dairy">🧀 Dairy</option>
+            <option value="snack">🍿 Snack</option>
+            <option value="drink">🥤 Drink</option>
+          </select>
+          <button class="btn btn-primary btn-sm" onclick="addSafeFood('leo')">+ Add</button>
+        </div>
+      </div>
+
+      <!-- Aftercare Notes -->
+      <div class="card accent-sky">
+        <div class="card-header">
+          <div class="card-icon">🏫</div>
+          <div>
+            <div class="card-title">School & Aftercare</div>
+            <div class="card-subtitle">Schedule, contacts, pickup notes</div>
+          </div>
+        </div>
+        <div contenteditable="true" class="editable-area" id="leoSchoolNotes" oninput="save('leoSchoolNotes', this.innerText)">School: ___________
+Teacher: ___________
+Aftercare schedule: ___________
+Pickup time (regular): ___________
+Pickup time (aftercare): ___________
+        </div>
+      </div>
+
+      <!-- General Notes -->
+      <div class="card accent-lavender">
+        <div class="card-header">
+          <div class="card-icon">📓</div>
+          <div>
+            <div class="card-title">Leo's Notes</div>
+            <div class="card-subtitle">Anything you want to remember</div>
+          </div>
+        </div>
+        <div contenteditable="true" class="editable-area" id="leoGeneralNotes" oninput="save('leoGeneralNotes', this.innerText)">Interests, friends, things that are working, wins to celebrate...
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── ROUTINES ── -->
+    <div id="kid-panel-routines" class="kid-panel" style="display:none;">
+      <p style="color: var(--text-light); font-size: 14px; margin-bottom: 16px;">Build and edit your routines. Add steps, reorder, rename — all saved automatically. 🌸</p>
+      <div id="routinesContainer"></div>
+      <button class="btn btn-primary" onclick="addNewRoutine()" style="margin-bottom: 20px;">+ New Routine</button>
+    </div>
+
+  </section>
+
+  <!-- ===== PREGNANCY ===== -->
+  <section id="pregnancy" class="section">
+    <h2 class="section-header">🤰 Pregnancy Tracker</h2>
+
+    <div class="preg-banner" style="background: linear-gradient(135deg, #FDE8EF, #FCF0F5); border-color: #F2B8C6;">
+      <div>
+        <div style="font-size:11px; color: var(--rose-deep); font-weight:700; text-transform: uppercase; letter-spacing:1px; margin-bottom: 4px;">It's a girl! 🩷</div>
+        <div style="display: flex; align-items: baseline; gap: 6px;">
+          <div class="preg-week-num" id="pregWeekNum" style="color: var(--rose-deep);">12</div>
+          <div style="font-family: 'Playfair Display', serif; font-size: 20px; color: var(--rose-deep);">weeks</div>
+        </div>
+        <div style="font-size:12px; color: var(--text-light); margin-top:2px;">pregnant</div>
+      </div>
+      <div class="preg-info">
+        <h3 id="pregBabySize" style="color: var(--rose-deep);">Your girl is the size of a lime 🍋</h3>
+        <p id="pregMilestone">First trimester almost done! 🎉</p>
+        <p style="margin-top: 6px; color: var(--rose-deep); font-weight: 600;" id="pregDueDate"></p>
+      </div>
+    </div>
+
+    <div class="card accent-rose">
+      <div class="card-header">
+        <div class="card-icon">📊</div>
+        <div><div class="card-title">Daily Log</div></div>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric-box" style="background: var(--sky-light);">
+          <div class="metric-value" style="color: var(--sky-deep); font-size: 22px;">💧</div>
+          <input type="number" id="waterIntake" placeholder="oz" style="text-align:center; background: transparent; border: none; width: 60px; font-size: 20px; font-weight: 700; color: var(--sky-deep);" oninput="save('waterIntake', this.value)">
+          <div class="metric-label">Water (oz)</div>
+        </div>
+        <div class="metric-box" style="background: var(--peach-light);">
+          <div class="metric-value" style="color: var(--peach-deep); font-size: 22px;">💊</div>
+          <div class="toggle" id="tog-vitamins" onclick="toggleSwitch(this, 'vitamins')" style="margin: 4px auto;"></div>
+          <div class="metric-label">Vitamins Taken</div>
+        </div>
+        <div class="metric-box" style="background: var(--lavender-light);">
+          <input type="number" id="sleepHours" placeholder="8" style="text-align:center; background: transparent; border: none; width: 60px; font-size: 28px; font-weight: 700; color: var(--lavender-deep); font-family: 'Playfair Display', serif;" oninput="save('sleepHours', this.value)">
+          <div class="metric-label">Sleep (hrs)</div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Energy Level</label>
+        <div class="scale-row" id="energyScale">
+          <button class="scale-btn" onclick="setScale('energy', 1, this)">😴</button>
+          <button class="scale-btn" onclick="setScale('energy', 2, this)">😕</button>
+          <button class="scale-btn" onclick="setScale('energy', 3, this)">😊</button>
+          <button class="scale-btn" onclick="setScale('energy', 4, this)">😄</button>
+          <button class="scale-btn" onclick="setScale('energy', 5, this)">⚡</button>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Nausea Level</label>
+        <div class="scale-row" id="nauseaScale">
+          <button class="scale-btn" onclick="setScale('nausea', 1, this)">💚</button>
+          <button class="scale-btn" onclick="setScale('nausea', 2, this)">😐</button>
+          <button class="scale-btn" onclick="setScale('nausea', 3, this)">🤢</button>
+          <button class="scale-btn" onclick="setScale('nausea', 4, this)">🤮</button>
+          <button class="scale-btn" onclick="setScale('nausea', 5, this)">😭</button>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Today's Weight (lbs)</label>
+        <div class="add-row">
+          <input type="number" id="pregWeight" placeholder="e.g. 145.2" step="0.1" onkeydown="if(event.key==='Enter')logPregWeight(this.value)">
+          <button class="btn btn-primary btn-sm" onclick="logPregWeight(document.getElementById('pregWeight').value)">Log ✓</button>
+        </div>
+        <div id="pregWeightConfirm" style="font-size:12px; color:var(--sage-deep); margin-top:4px; min-height:16px;"></div>
+      </div>
+    </div>
+
+    <div class="card accent-peach">
+      <div class="card-header">
+        <div class="card-icon">📈</div>
+        <div><div class="card-title">Weight Gain Chart</div></div>
+      </div>
+      <div class="weight-chart">
+        <canvas id="weightChart" style="width:100%; height:140px;"></canvas>
+      </div>
+      <div style="font-size:12px; color: var(--text-light); margin-top: 6px; text-align: center;" id="weightAvgDisplay"></div>
+    </div>
+
+    <div class="card accent-lavender">
+      <div class="card-header">
+        <div class="card-icon">🏥</div>
+        <div><div class="card-title">OB Appointments</div></div>
+      </div>
+      <div id="obAppts"></div>
+      <div class="add-row">
+        <input type="text" id="newObDate" placeholder="Date" style="max-width: 100px;">
+        <input type="text" id="newObAppt" placeholder="e.g. 20-week anatomy scan..." style="flex: 1;">
+        <button class="btn btn-soft btn-sm" onclick="addObAppt()">+ Add</button>
+      </div>
+    </div>
+
+    <div class="card accent-sage">
+      <div class="card-header">
+        <div class="card-icon">🪺</div>
+        <div><div class="card-title">Baby Prep / Nesting Tasks</div></div>
+      </div>
+      <div id="nestingTasks"></div>
+      <div class="add-row">
+        <input type="text" id="newNestingTask" placeholder="Set up nursery, buy car seat..." onkeydown="if(event.key==='Enter')addNestingTask()">
+        <button class="btn btn-soft btn-sm" onclick="addNestingTask()">+ Add</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAITH ===== -->
+  <section id="faith" class="section">
+    <h2 class="section-header">✝️ Faith & Spirituality</h2>
+
+    <div class="verse-card">
+      <div class="verse-text" contenteditable="true" id="bibleVerse" oninput="save('bibleVerse', this.innerText)">"For I know the plans I have for you," declares the LORD, "plans to prosper you and not to harm you, plans to give you hope and a future."</div>
+      <div class="verse-ref" contenteditable="true" id="bibleRef" oninput="save('bibleRef', this.innerText)">— Jeremiah 29:11</div>
+    </div>
+
+    <div class="card accent-gold">
+      <div class="card-header">
+        <div class="card-icon">🙏</div>
+        <div><div class="card-title">Daily Prayer Intentions</div></div>
+      </div>
+      <textarea rows="4" id="prayerIntentions" placeholder="Who and what are you lifting up today?" oninput="save('prayerIntentions', this.value)"></textarea>
+    </div>
+
+    <div class="card accent-peach">
+      <div class="card-header">
+        <div class="card-icon">✨</div>
+        <div>
+          <div class="card-title">God Moments</div>
+          <div class="card-subtitle">When you felt His presence</div>
+        </div>
+      </div>
+      <div id="godMomentsList"></div>
+      <div class="add-row" style="flex-direction: column; gap: 6px;">
+        <textarea id="newGodMoment" rows="2" placeholder="Describe the moment..." style="width: 100%;"></textarea>
+        <button class="btn btn-primary btn-sm" onclick="addGodMoment()">✨ Log this moment</button>
+      </div>
+    </div>
+
+    <div class="card accent-sage">
+      <div class="card-header">
+        <div class="card-icon">💛</div>
+        <div>
+          <div class="card-title">Answered Prayers</div>
+          <div class="card-subtitle">A record of His faithfulness</div>
+        </div>
+      </div>
+      <div id="answeredPrayersList"></div>
+      <div class="add-row" style="flex-direction: column; gap: 6px;">
+        <textarea id="newAnsweredPrayer" rows="2" placeholder="How was this prayer answered?" style="width: 100%;"></textarea>
+        <button class="btn btn-sage btn-sm" onclick="addAnsweredPrayer()">💛 Record this blessing</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WELLNESS ===== -->
+  <section id="wellness" class="section">
+    <h2 class="section-header">💪 Wellness</h2>
+
+    <div class="card accent-sage">
+      <div class="card-header">
+        <div class="card-icon">🏋️</div>
+        <div><div class="card-title">Workout Log</div></div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Today's Workout</label>
+        <input type="text" id="workoutLog" placeholder="e.g. 30 min walk, prenatal yoga..." oninput="save('workoutLog', this.value)">
+      </div>
+      <div id="workoutHistory"></div>
+      <button class="btn btn-sage btn-sm" onclick="logWorkout()" style="margin-top: 8px;">✓ Log today's workout</button>
+    </div>
+
+    <div class="card accent-blush">
+      <div class="card-header">
+        <div class="card-icon">🌡️</div>
+        <div><div class="card-title">Stress Check-In</div></div>
+      </div>
+      <label class="input-label">Stress Level (1 = zen, 5 = maxed out)</label>
+      <div class="scale-row" id="stressScale">
+        <button class="scale-btn" onclick="setScale('stress', 1, this)">🌿</button>
+        <button class="scale-btn" onclick="setScale('stress', 2, this)">😌</button>
+        <button class="scale-btn" onclick="setScale('stress', 3, this)">😐</button>
+        <button class="scale-btn" onclick="setScale('stress', 4, this)">😤</button>
+        <button class="scale-btn" onclick="setScale('stress', 5, this)">🔥</button>
+      </div>
+    </div>
+
+    <div class="card accent-lavender">
+      <div class="card-header">
+        <div class="card-icon">💝</div>
+        <div><div class="card-title">Daily Gratitude</div></div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Three Things I'm Grateful For</label>
+        <input type="text" id="grat1" placeholder="1." oninput="save('grat1', this.value)" style="margin-bottom: 6px;">
+        <input type="text" id="grat2" placeholder="2." oninput="save('grat2', this.value)" style="margin-bottom: 6px;">
+        <input type="text" id="grat3" placeholder="3." oninput="save('grat3', this.value)">
+      </div>
+    </div>
+
+    <div class="card accent-mint">
+      <div class="card-header">
+        <div class="card-icon">⚖️</div>
+        <div><div class="card-title">Weight Log</div><div class="card-subtitle">Feeds into pregnancy tracker</div></div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Today's Weight (lbs)</label>
+        <div class="add-row">
+          <input type="number" id="wellnessWeight" placeholder="e.g. 145.2" step="0.1" onkeydown="if(event.key==='Enter')logWellnessWeight(this.value)">
+          <button class="btn btn-primary btn-sm" onclick="logWellnessWeight(document.getElementById('wellnessWeight').value)">Log ✓</button>
+        </div>
+        <div id="wellnessWeightConfirm" style="font-size:12px; color:var(--sage-deep); margin-top:4px; min-height:16px;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BETTY ===== -->
+  <section id="betty" class="section">
+    <h2 class="section-header">🐾 Betty</h2>
+
+    <div class="card accent-peach">
+      <span class="betty-emoji">🐕</span>
+      <div class="toggle-row">
+        <span class="toggle-label">🦮 Morning walk done</span>
+        <div class="toggle" id="tog-morningWalk" onclick="toggleSwitch(this, 'morningWalk')"></div>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">🌅 Evening walk done</span>
+        <div class="toggle" id="tog-eveningWalk" onclick="toggleSwitch(this, 'eveningWalk')"></div>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">💊 Medications given</span>
+        <div class="toggle" id="tog-bettyMeds" onclick="toggleSwitch(this, 'bettyMeds')"></div>
+      </div>
+    </div>
+
+    <div class="card accent-lavender">
+      <div class="card-header">
+        <div class="card-icon">💊</div>
+        <div><div class="card-title">Medications & Supplements</div></div>
+      </div>
+      <div contenteditable="true" class="editable-area" id="bettyMedsList" oninput="save('bettyMedsList', this.innerText)">
+Add Betty's medications here...
+      </div>
+    </div>
+
+    <div class="card accent-sage">
+      <div class="card-header">
+        <div class="card-icon">🏥</div>
+        <div><div class="card-title">Vet Appointments</div></div>
+      </div>
+      <div id="vetAppts"></div>
+      <div class="add-row">
+        <input type="text" id="newVetDate" placeholder="Date" style="max-width: 100px;">
+        <input type="text" id="newVetAppt" placeholder="e.g. Annual checkup..." style="flex: 1;">
+        <button class="btn btn-soft btn-sm" onclick="addVetAppt()">+ Add</button>
+      </div>
+    </div>
+
+    <div class="card accent-blush">
+      <div class="card-header">
+        <div class="card-icon">✂️</div>
+        <div><div class="card-title">Grooming Schedule</div></div>
+      </div>
+      <div contenteditable="true" class="editable-area" id="bettyGrooming" oninput="save('bettyGrooming', this.innerText)">
+Last grooming: 
+Next grooming: 
+Groomer contact: 
+Notes:
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== IDEAS BANK ===== -->
+  <section id="ideas" class="section">
+    <h2 class="section-header">💡 Ideas Bank</h2>
+    <p style="color: var(--text-light); font-size: 14px; margin-bottom: 16px;">Dump your thoughts here. No commitment, just capture. ✨</p>
+
+    <div class="ideas-grid">
+      <div class="idea-category" style="border-top-color: var(--peach-deep);">
+        <h4>🍪 Hustle Ideas</h4>
+        <div contenteditable="true" class="editable-area" id="idea-hustle" oninput="save('idea-hustle', this.innerText)" style="min-height: 60px; font-size: 13px;"></div>
+      </div>
+      <div class="idea-category" style="border-top-color: var(--sage-deep);">
+        <h4>🏠 Family & Home Ideas</h4>
+        <div contenteditable="true" class="editable-area" id="idea-family" oninput="save('idea-family', this.innerText)" style="min-height: 60px; font-size: 13px;"></div>
+      </div>
+      <div class="idea-category" style="border-top-color: var(--sage-deep);">
+        <h4>💪 Health Ideas</h4>
+        <div contenteditable="true" class="editable-area" id="idea-health" oninput="save('idea-health', this.innerText)" style="min-height: 60px; font-size: 13px;"></div>
+      </div>
+      <div class="idea-category" style="border-top-color: var(--gold-deep);">
+        <h4>✝️ Spirituality Ideas</h4>
+        <div contenteditable="true" class="editable-area" id="idea-spirit" oninput="save('idea-spirit', this.innerText)" style="min-height: 60px; font-size: 13px;"></div>
+      </div>
+      <div class="idea-category" style="border-top-color: var(--blush-deep);">
+        <h4>🏡 Home Project Ideas</h4>
+        <div contenteditable="true" class="editable-area" id="idea-home" oninput="save('idea-home', this.innerText)" style="min-height: 60px; font-size: 13px;"></div>
+      </div>
+      <div class="idea-category" style="border-top-color: var(--lavender-deep);">
+        <h4>🎨 Hobby Ideas</h4>
+        <div contenteditable="true" class="editable-area" id="idea-hobbies" oninput="save('idea-hobbies', this.innerText)" style="min-height: 60px; font-size: 13px;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SIDE QUESTS ===== -->
+  <section id="quests" class="section">
+    <h2 class="section-header">🎲 Side Quest Ideas</h2>
+    <p style="color: var(--text-light); font-size: 14px; margin-bottom: 16px;">Random ideas, "what ifs," and sparks that don't fit anywhere else. Just capture it. 🌟</p>
+
+    <div class="card accent-lavender">
+      <div id="questsList"></div>
+      <div class="add-row">
+        <input type="text" id="newQuest" placeholder="What if I tried..." onkeydown="if(event.key==='Enter')addQuest()">
+        <button class="btn btn-primary btn-sm" onclick="addQuest()">✦ Add</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// ============================================================
+// DATA & STORAGE
+// ============================================================
+const TODAY = new Date();
+// Anchor Monday Mar 9 2026 = day 0 of 14-day cycle
+// 0=Mon transition | 1=Tue free
+// 2=Wed first | 3=Thu full
+// 4=Fri transition | 5=Sat free | 6=Sun free
+// 7=Mon first | 8=Tue full
+// 9=Wed transition | 10=Thu free
+// 11=Fri first | 12=Sat full | 13=Sun full
+const CYCLE_ANCHOR = new Date('2026-03-09');
+const CYCLE_PATTERN = {
+  0:'transition', 1:'free',
+  2:'first', 3:'full',
+  4:'transition', 5:'free', 6:'free',
+  7:'first', 8:'full',
+  9:'transition', 10:'free',
+  11:'first', 12:'full', 13:'full'
+};
+
+const D = {};
+
+function save(key, val) {
+  D[key] = val;
+  localStorage.setItem('lifeplanner_' + key, JSON.stringify(val));
+}
+
+function load(key, def = null) {
+  const v = localStorage.getItem('lifeplanner_' + key);
+  if (v === null) return def;
+  try { return JSON.parse(v); } catch { return v; }
+}
+
+function loadAll() {
+  const keys = ['gigiSchool','aces','acesLocation','aftercare','holiday',
+    'vitamins','morningWalk','eveningWalk','bettyMeds',
+    'dayWord','dailyGratitude','prayerIntentions','bibleVerse','bibleRef',
+    'waterIntake','sleepHours','workoutLog','grat1','grat2','grat3',
+    'wellnessWeight','pregWeight',
+    'weekdayRoutine','weekendRoutine','gigiNotes','bettyMedsList','bettyGrooming',
+    'bakingDays','ddHoursGoal','ddEarningsGoal','ddHoursActual','ddEarned','ddWindows',
+    'coachingWeekGoal','cookieGoalVal','cookieEarnedVal',
+    'meal-mon','meal-tue','meal-wed','meal-thu','meal-fri','meal-wknd',
+    'idea-hustle','idea-family','idea-health','idea-spirit','idea-home','idea-hobbies',
+    'energy','nausea','stress',
+    'workoutHistory', 'pregWeights',
+  ];
+  keys.forEach(k => {
+    const v = load(k);
+    if (v !== null) D[k] = v;
+  });
+}
+
+// ============================================================
+// CYCLE LOGIC
+// ============================================================
+function getDayType(date) {
+  const anchor = new Date(CYCLE_ANCHOR);
+  anchor.setHours(0,0,0,0);
+  const d = new Date(date);
+  d.setHours(0,0,0,0);
+  const diff = Math.floor((d - anchor) / 86400000);
+  const cycleDay = ((diff % 14) + 14) % 14;
+  const pattern = CYCLE_PATTERN[cycleDay];
+  if (pattern === 'free')        return { type: 'free',        label: '🌿 Free Day',             class: 'free-day'   };
+  if (pattern === 'transition')  return { type: 'transition',  label: '🚌 Transition Morning',    class: 'transition' };
+  if (pattern === 'first')       return { type: 'first-stretch',label: '🔄 First Day of Stretch', class: 'first-day'  };
+                                 return { type: 'full-kids',   label: '🧒 Full Kids Day',          class: 'full-kids'  };
+}
+
+// ============================================================
+// UI HELPERS
+// ============================================================
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+function toggleSwitch(el, key) {
+  const isOn = !el.classList.contains('on');
+  el.classList.toggle('on', isOn);
+  save(key, isOn);
+  if (key === 'aces') {
+    document.getElementById('aces-location-row').style.display = isOn ? 'flex' : 'none';
+    if (isOn) restoreAcesLocation();
+  }
+}
+
+function setAcesLocation(val) {
+  save('acesLocation', val);
+  restoreAcesLocation();
+}
+
+function restoreAcesLocation() {
+  const val = load('acesLocation', 'home');
+  const home = document.getElementById('aces-btn-home');
+  const away = document.getElementById('aces-btn-away');
+  if (!home || !away) return;
+  if (val === 'home') {
+    home.style.background = 'var(--sage-deep)'; home.style.color = 'white';
+    away.style.background = 'var(--lavender-light)'; away.style.color = 'var(--lavender-deep)';
+  } else {
+    away.style.background = 'var(--lavender-deep)'; away.style.color = 'white';
+    home.style.background = 'var(--sage-light)'; home.style.color = 'var(--sage-deep)';
+  }
+}
+
+function restoreToggle(key) {
+  const el = document.getElementById('tog-' + key);
+  if (!el) return;
+  const val = load(key, false);
+  el.classList.toggle('on', val);
+  if (key === 'aces') {
+    document.getElementById('aces-location-row').style.display = val ? 'flex' : 'none';
+    if (val) restoreAcesLocation();
+  }
+}
+
+function restoreInput(id, key) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const val = load(key, '');
+  if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
+    el.value = val;
+  } else {
+    el.innerText = val;
+  }
+}
+
+function restoreEditable(id, key, def) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const val = load(key);
+  if (val) el.innerText = val;
+}
+
+function setScale(name, val, btn) {
+  const container = btn.parentElement;
+  container.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  save(name, val);
+}
+
+function restoreScale(name, containerId) {
+  const val = load(name);
+  if (val === null) return;
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const btns = container.querySelectorAll('.scale-btn');
+  btns.forEach((b, i) => b.classList.toggle('selected', i + 1 === val));
+}
+
+// ============================================================
+// CHECKLIST BUILDER
+// ============================================================
+function makeChecklist(containerId, storageKey, items = []) {
+  const saved = load(storageKey, items);
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+  if (!saved.length) {
+    el.innerHTML = '<div class="empty-state"><span class="empty-icon">✨</span>Nothing here yet!</div>';
+    return;
+  }
+  saved.forEach((item, i) => {
+    el.appendChild(makeCheckItem(item, i, storageKey, saved));
+  });
+}
+
+function makeCheckItem(item, i, storageKey, allItems) {
+  const div = document.createElement('div');
+  div.className = 'check-item';
+  const box = document.createElement('div');
+  box.className = 'check-box' + (item.done ? ' checked' : '');
+  box.onclick = () => {
+    item.done = !item.done;
+    save(storageKey, allItems);
+    makeChecklist(document.getElementById(storageKey.replace('Items','')+'-container')?.id || storageKey.split('Items')[0], storageKey, []);
+    // re-render
+    renderChecklist(storageKey);
+  };
+  const text = document.createElement('span');
+  text.className = 'check-text' + (item.done ? ' done' : '');
+  text.textContent = item.text;
+  const del = document.createElement('button');
+  del.className = 'check-delete';
+  del.innerHTML = '×';
+  del.onclick = () => {
+    allItems.splice(i, 1);
+    save(storageKey, allItems);
+    renderChecklist(storageKey);
+  };
+  div.appendChild(box);
+  div.appendChild(text);
+  div.appendChild(del);
+  return div;
+}
+
+const checklistMap = {};
+
+function initChecklist(containerId, storageKey, defaults = []) {
+  checklistMap[storageKey] = { containerId, defaults };
+  renderChecklist(storageKey);
+}
+
+function renderChecklist(storageKey) {
+  const { containerId, defaults } = checklistMap[storageKey];
+  const items = load(storageKey, defaults.map(t => ({ text: t, done: false })));
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+  if (!items.length) {
+    el.innerHTML = '<div class="empty-state"><span class="empty-icon">✨</span>Add something!</div>';
+    return;
+  }
+  items.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'check-item';
+    const box = document.createElement('div');
+    box.className = 'check-box' + (item.done ? ' checked' : '');
+    box.onclick = () => {
+      items[i].done = !items[i].done;
+      save(storageKey, items);
+      renderChecklist(storageKey);
+    };
+    const text = document.createElement('span');
+    text.className = 'check-text' + (item.done ? ' done' : '');
+    text.textContent = item.text;
+    const del = document.createElement('button');
+    del.className = 'check-delete';
+    del.innerHTML = '×';
+    del.onclick = () => {
+      items.splice(i, 1);
+      save(storageKey, items);
+      renderChecklist(storageKey);
+    };
+    div.appendChild(box); div.appendChild(text); div.appendChild(del);
+    el.appendChild(div);
+  });
+}
+
+function addToChecklist(storageKey, inputId) {
+  const input = document.getElementById(inputId);
+  if (!input || !input.value.trim()) return;
+  const items = load(storageKey, []);
+  items.push({ text: input.value.trim(), done: false });
+  save(storageKey, items);
+  input.value = '';
+  renderChecklist(storageKey);
+}
+
+// ============================================================
+// SPECIFIC ADD FUNCTIONS
+// ============================================================
+function addTodayTodo() { addToChecklist('todayTodosItems', 'newTodayTodo'); }
+function addCookieTodo() { addToChecklist('cookieTodosItems', 'newCookieTodo'); }
+function addCoachingTodo() { addToChecklist('coachingTodosItems', 'newCoachingTodo'); }
+function addNestingTask() { addToChecklist('nestingItems', 'newNestingTask'); }
+
+function addOrder() {
+  const input = document.getElementById('newOrder');
+  if (!input.value.trim()) return;
+  addToChecklist('cookieOrders', 'newOrder');
+}
+
+function addClient() {
+  addToChecklist('coachingClients', 'newClient');
+}
+
+function addFamilyAppt() {} // legacy stub
+
+function addObAppt() {
+  const date = document.getElementById('newObDate').value.trim();
+  const desc = document.getElementById('newObAppt').value.trim();
+  if (!desc) return;
+  const items = load('obAppts', []);
+  items.push({ date, desc });
+  save('obAppts', items);
+  document.getElementById('newObDate').value = '';
+  document.getElementById('newObAppt').value = '';
+  renderAppts('obAppts', 'obAppts', 'var(--rose)');
+}
+
+function addVetAppt() {
+  const date = document.getElementById('newVetDate').value.trim();
+  const desc = document.getElementById('newVetAppt').value.trim();
+  if (!desc) return;
+  const items = load('vetAppts', []);
+  items.push({ date, desc });
+  save('vetAppts', items);
+  document.getElementById('newVetDate').value = '';
+  document.getElementById('newVetAppt').value = '';
+  renderAppts('vetAppts', 'vetAppts', 'var(--sage)');
+}
+
+function renderAppts(containerId, storageKey, color) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const items = load(storageKey, []);
+  el.innerHTML = '';
+  if (!items.length) {
+    el.innerHTML = '<div class="empty-state"><span class="empty-icon">📅</span>No appointments yet</div>';
+    return;
+  }
+  items.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'appt-item';
+    div.innerHTML = `
+      <div class="appt-date-box" style="border-left: 3px solid ${color}">
+        <div class="appt-month" style="color: ${color}">${item.date || '—'}</div>
+      </div>
+      <div style="flex: 1; font-size: 14px; color: var(--text-mid);">${item.desc}</div>
+      <button class="check-delete" onclick="deleteAppt('${storageKey}','${containerId}','${color}',${i})">×</button>
+    `;
+    el.appendChild(div);
+  });
+}
+
+function deleteAppt(storageKey, containerId, color, i) {
+  const items = load(storageKey, []);
+  items.splice(i, 1);
+  save(storageKey, items);
+  renderAppts(containerId, storageKey, color);
+}
+
+// Log entries (God moments, answered prayers)
+function addLogEntry(storageKey, inputId, containerId, accentColor) {
+  const input = document.getElementById(inputId);
+  if (!input || !input.value.trim()) return;
+  const items = load(storageKey, []);
+  items.unshift({ date: TODAY.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), text: input.value.trim() });
+  save(storageKey, items);
+  input.value = '';
+  renderLogEntries(containerId, storageKey, accentColor);
+}
+
+function addGodMoment() { addLogEntry('godMoments', 'newGodMoment', 'godMomentsList', 'var(--peach-deep)'); }
+function addAnsweredPrayer() { addLogEntry('answeredPrayers', 'newAnsweredPrayer', 'answeredPrayersList', 'var(--sage-deep)'); }
+
+function renderLogEntries(containerId, storageKey, color) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const items = load(storageKey, []);
+  el.innerHTML = '';
+  if (!items.length) {
+    el.innerHTML = '<div class="empty-state"><span class="empty-icon">✨</span>Your log will grow here 🌱</div>';
+    return;
+  }
+  items.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'log-entry';
+    div.style.borderLeftColor = color;
+    div.innerHTML = `
+      <div class="log-entry-date">${item.date}</div>
+      <div class="log-entry-text">${item.text}</div>
+      <button class="log-delete" onclick="deleteLogEntry('${storageKey}','${containerId}','${color}',${i})">×</button>
+    `;
+    el.appendChild(div);
+  });
+}
+
+function deleteLogEntry(storageKey, containerId, color, i) {
+  const items = load(storageKey, []);
+  items.splice(i, 1);
+  save(storageKey, items);
+  renderLogEntries(containerId, storageKey, color);
+}
+
+// Side quests
+function addQuest() {
+  const input = document.getElementById('newQuest');
+  if (!input.value.trim()) return;
+  const items = load('sideQuests', []);
+  items.unshift(input.value.trim());
+  save('sideQuests', items);
+  input.value = '';
+  renderQuests();
+}
+
+function renderQuests() {
+  const el = document.getElementById('questsList');
+  if (!el) return;
+  const items = load('sideQuests', []);
+  el.innerHTML = '';
+  if (!items.length) {
+    el.innerHTML = '<div class="empty-state"><span class="empty-icon">🎲</span>Your wild ideas go here!</div>';
+    return;
+  }
+  items.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'quest-item';
+    div.innerHTML = `
+      <span class="quest-star">✦</span>
+      <span class="quest-text">${item}</span>
+      <button class="check-delete" onclick="deleteQuest(${i})">×</button>
+    `;
+    el.appendChild(div);
+  });
+}
+
+function deleteQuest(i) {
+  const items = load('sideQuests', []);
+  items.splice(i, 1);
+  save('sideQuests', items);
+  renderQuests();
+}
+
+// ============================================================
+// WORKOUT LOG
+// ============================================================
+function logWorkout() {
+  const input = document.getElementById('workoutLog');
+  if (!input.value.trim()) return;
+  const history = load('workoutHistory', []);
+  history.unshift({ date: TODAY.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }), text: input.value.trim() });
+  save('workoutHistory', history.slice(0, 14));
+  input.value = ''; save('workoutLog', '');
+  renderWorkoutHistory();
+}
+
+function renderWorkoutHistory() {
+  const el = document.getElementById('workoutHistory');
+  if (!el) return;
+  const history = load('workoutHistory', []);
+  el.innerHTML = '';
+  history.slice(0, 5).forEach(w => {
+    const div = document.createElement('div');
+    div.className = 'log-entry';
+    div.style.borderLeftColor = 'var(--sage-deep)';
+    div.innerHTML = `<div class="log-entry-date">${w.date}</div><div class="log-entry-text">${w.text}</div>`;
+    el.appendChild(div);
+  });
+}
+
+// ============================================================
+// PREGNANCY WEIGHT CHART
+// ============================================================
+function logPregWeight(val) {
+  if (!val || isNaN(parseFloat(val))) return;
+  save('pregWeight', val);
+  const weights = load('pregWeights', {});
+  const weekKey = 'w' + getPregWeek();
+  if (!weights[weekKey]) weights[weekKey] = [];
+  // Replace today's entry (only keep one per day)
+  const todayKey = TODAY.toDateString();
+  const dayEntries = load('pregWeightDays', {});
+  if (!dayEntries[todayKey]) {
+    weights[weekKey].push(parseFloat(val));
+  } else {
+    // Update the last entry
+    const idx = weights[weekKey].length - 1;
+    if (idx >= 0) weights[weekKey][idx] = parseFloat(val);
+    else weights[weekKey].push(parseFloat(val));
+  }
+  dayEntries[todayKey] = val;
+  save('pregWeights', weights);
+  save('pregWeightDays', dayEntries);
+  drawWeightChart();
+  const confirm = document.getElementById('pregWeightConfirm');
+  if (confirm) { confirm.textContent = '✓ Logged ' + parseFloat(val).toFixed(1) + ' lbs'; setTimeout(()=>{ confirm.textContent=''; }, 3000); }
+  // Sync wellness weight field
+  const ww = document.getElementById('wellnessWeight');
+  if (ww && !ww.value) ww.value = val;
+}
+
+function logWellnessWeight(val) {
+  if (!val || isNaN(parseFloat(val))) return;
+  save('wellnessWeight', val);
+  const confirm = document.getElementById('wellnessWeightConfirm');
+  if (confirm) { confirm.textContent = '✓ Logged ' + parseFloat(val).toFixed(1) + ' lbs'; setTimeout(()=>{ confirm.textContent=''; }, 3000); }
+  // Sync to pregnancy tracker
+  const pw = document.getElementById('pregWeight');
+  if (pw) pw.value = val;
+  logPregWeight(val);
+}
+
+function syncPregWeight(val) {
+  document.getElementById('pregWeight').value = val;
+}
+
+function getPregWeek() {
+  return load('pregWeek', 12);
+}
+
+function drawWeightChart() {
+  const canvas = document.getElementById('weightChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const weights = load('pregWeights', {});
+  const weeks = Object.keys(weights).sort((a, b) => parseInt(a.slice(1)) - parseInt(b.slice(1)));
+  if (weeks.length < 2) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#9A8897';
+    ctx.font = '13px Nunito, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Log weight across more weeks to see your chart 🌸', canvas.width / 2, 70);
+    return;
+  }
+  const avgs = weeks.map(w => {
+    const arr = weights[w];
+    return arr.reduce((a, b) => a + b, 0) / arr.length;
+  });
+  const minW = Math.min(...avgs) - 2;
+  const maxW = Math.max(...avgs) + 2;
+  const W = canvas.width = canvas.offsetWidth * window.devicePixelRatio || 600;
+  const H = canvas.height = 140 * (window.devicePixelRatio || 1);
+  ctx.clearRect(0, 0, W, H);
+  const pad = { l: 40, r: 20, t: 16, b: 30 };
+  const chartW = W - pad.l - pad.r;
+  const chartH = H - pad.t - pad.b;
+  const xStep = chartW / Math.max(weeks.length - 1, 1);
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(201,184,232,0.3)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.t + (chartH * i / 4);
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+  }
+
+  // Gradient fill
+  const grad = ctx.createLinearGradient(0, pad.t, 0, H - pad.b);
+  grad.addColorStop(0, 'rgba(201,184,232,0.4)');
+  grad.addColorStop(1, 'rgba(201,184,232,0.0)');
+
+  ctx.beginPath();
+  avgs.forEach((w, i) => {
+    const x = pad.l + i * xStep;
+    const y = pad.t + chartH * (1 - (w - minW) / (maxW - minW));
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.lineTo(pad.l + (avgs.length - 1) * xStep, H - pad.b);
+  ctx.lineTo(pad.l, H - pad.b);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  ctx.strokeStyle = '#9B85D4';
+  ctx.lineWidth = 2.5;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  avgs.forEach((w, i) => {
+    const x = pad.l + i * xStep;
+    const y = pad.t + chartH * (1 - (w - minW) / (maxW - minW));
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // Dots & labels
+  avgs.forEach((w, i) => {
+    const x = pad.l + i * xStep;
+    const y = pad.t + chartH * (1 - (w - minW) / (maxW - minW));
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#9B85D4';
+    ctx.fill();
+    ctx.fillStyle = '#6B5668';
+    ctx.font = '10px Nunito, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(weeks[i], x, H - 8);
+  });
+
+  // Weight avg display
+  const latest = avgs[avgs.length - 1];
+  document.getElementById('weightAvgDisplay').textContent =
+    `Current week avg: ${latest.toFixed(1)} lbs · ${weeks.length} weeks tracked`;
+}
+
+// ============================================================
+// PREGNANCY INFO
+// ============================================================
+const babyData = {
+  8:  { size: 'raspberry 🫐',      note: 'Tiny fingers forming! 🩷' },
+  9:  { size: 'grape 🍇',           note: 'Her heart has 4 chambers now.' },
+  10: { size: 'strawberry 🍓',      note: 'Little fingernails growing!' },
+  11: { size: 'fig 🫐',             note: 'She can yawn now! 🥹' },
+  12: { size: 'lime 🍋',            note: 'She has reflexes and can open her fingers! 🩷' },
+  13: { size: 'lemon 🍋',           note: 'Welcome to the 2nd trimester! You made it! 🎉' },
+  14: { size: 'peach 🍑',           note: 'She can make facial expressions! 🥹' },
+  15: { size: 'apple 🍎',           note: 'She's growing hair and eyebrows!' },
+  16: { size: 'avocado 🥑',         note: 'Her eyes are moving behind her lids.' },
+  17: { size: 'pear 🍐',            note: 'She can hear your heartbeat! 💕' },
+  18: { size: 'bell pepper 🫑',     note: 'She can hear your voice — talk to her! 🌸' },
+  19: { size: 'mango 🥭',           note: 'She might be kicking soon! 🩷' },
+  20: { size: 'banana 🍌',          note: 'Halfway there, Emily! 🎉' },
+  21: { size: 'carrot 🥕',          note: 'She can swallow and taste amniotic fluid.' },
+  22: { size: 'papaya 🍈',          note: 'She looks like a tiny newborn now! 🥹' },
+  23: { size: 'grapefruit 🍊',      note: 'She's practicing breathing movements!' },
+  24: { size: 'corn 🌽',            note: 'Viability milestone — you've got this! 💪' },
+  25: { size: 'cauliflower 🥦',     note: 'She's responding to your voice and touch.' },
+  26: { size: 'scallion bunch 🧅',  note: 'Her eyes will open soon! 👀' },
+  27: { size: 'rutabaga 🫛',        note: 'Last week of the 2nd trimester!' },
+  28: { size: 'eggplant 🍆',        note: 'Third trimester! Almost there! 🌟' },
+  29: { size: 'butternut squash 🎃',note: 'She's gaining about half a pound a week now.' },
+  30: { size: 'cabbage 🥬',         note: 'Her brain is developing rapidly! 🧠' },
+  31: { size: 'coconut 🥥',         note: 'All 5 senses are working!' },
+  32: { size: 'squash 🫑',          note: 'She's head-down and getting ready.' },
+  33: { size: 'pineapple 🍍',       note: 'Her bones are hardening!' },
+  34: { size: 'cantaloupe 🍈',      note: 'Lungs almost fully developed! 💨' },
+  35: { size: 'honeydew melon 🍈',  note: 'She's running out of room in there 😄' },
+  36: { size: 'romaine lettuce 🥬', note: 'She's considered early term! 🌸' },
+  37: { size: 'winter melon 🍈',    note: 'Full term! She could come any day. 💕' },
+  38: { size: 'pumpkin 🎃',         note: 'She's ready to meet you! 🩷' },
+  39: { size: 'mini watermelon 🍉', note: 'Any day now, Emily! 🌟' },
+  40: { size: 'watermelon 🍉',      note: 'Your baby girl is ready! 🩷✨' },
+};
+
+function getPregInfo(week) {
+  const keys = Object.keys(babyData).map(Number).sort((a, b) => a - b);
+  let info = babyData[12];
+  for (const k of keys) { if (week >= k) info = babyData[k]; }
+  return info;
+}
+
+function initPregnancy() {
+  // Anchored to due date Sept 19, 2026 (confirmed by OB)
+  // Week 1 start = Sept 19 - 280 days = Dec 13, 2025
+  const DUE_DATE = new Date('2026-09-19');
+  const WEEK1_START = new Date('2025-12-13');
+
+  const daysPreg = Math.floor((TODAY - WEEK1_START) / 86400000);
+  const currentWeek = Math.min(40, Math.max(1, Math.floor(daysPreg / 7)));
+  const currentDay  = daysPreg % 7;
+  save('pregWeek', currentWeek);
+
+  // Days until due
+  const daysLeft = Math.ceil((DUE_DATE - TODAY) / 86400000);
+  const weeksLeft = Math.floor(daysLeft / 7);
+
+  document.getElementById('pregWeekNum').textContent = currentWeek;
+  const info = getPregInfo(currentWeek);
+  document.getElementById('pregBabySize').textContent = `Your girl is the size of a ${info.size}`;
+  document.getElementById('pregMilestone').textContent = info.note;
+  document.getElementById('pregDueDate').textContent =
+    `Due September 19, 2026 · ${weeksLeft} weeks to go 🩷`;
+}
+
+// ============================================================
+// DAY HEADER & WEEK GRID
+// ============================================================
+function initHeader() {
+  const dayType = getDayType(TODAY);
+  document.getElementById('dayBadge').className = 'day-badge ' + dayType.class;
+  document.getElementById('dayBadge').textContent = dayType.label;
+  document.getElementById('dateDisplay').textContent = TODAY.toLocaleDateString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+  });
+  renderTodaySummary(dayType);
+}
+
+function renderTodaySummary(dayType) {
+  const el = document.getElementById('todaySummary');
+  const hour = TODAY.getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
+  let scheduleNote = '';
+  let chips = '';
+
+  switch (dayType.type) {
+    case 'full-kids':
+      scheduleNote = "Full kids day — morning run, afternoon pickup, and evening pickup. You've got this, Emily. 💪";
+      chips = `
+        <div class="summary-chip">🌅 Morning school run</div>
+        <div class="summary-chip">🔄 Afternoon pickup</div>
+        <div class="summary-chip">🌙 Evening pickup</div>
+      `;
+      break;
+    case 'transition':
+      scheduleNote = "You start with the morning school run, then your day opens up! Make the most of the free window. 🌸";
+      chips = `
+        <div class="summary-chip">🚌 Morning drop-off</div>
+        <div class="summary-chip">✨ Free block opens up</div>
+      `;
+      break;
+    case 'first-stretch':
+      scheduleNote = "First day of your stretch. No morning run — afternoon and evening pickups only. 🧡";
+      chips = `
+        <div class="summary-chip">😴 No morning run</div>
+        <div class="summary-chip">🔄 Afternoon pickup</div>
+        <div class="summary-chip">🌙 Evening pickup</div>
+      `;
+      break;
+    case 'free':
+      scheduleNote = "Kid-free day. Breathe, work your hustles, and take care of you. 🌿";
+      chips = `
+        <div class="summary-chip">🌿 No transportation runs</div>
+        <div class="summary-chip">💼 Hustle time</div>
+        <div class="summary-chip">🛁 Self-care window</div>
+      `;
+      break;
+  }
+
+  el.innerHTML = `
+    <div class="today-greeting">${greeting}, Emily. ✨</div>
+    <p style="font-size: 14px; color: var(--text-mid); line-height: 1.5;">${scheduleNote}</p>
+    <div class="today-summary-list">${chips}</div>
+  `;
+}
+
+function renderWeekGrid() {
+  const el = document.getElementById('weekGrid');
+  el.innerHTML = '';
+  const startOfWeek = new Date(TODAY);
+  startOfWeek.setDate(TODAY.getDate() - TODAY.getDay()); // Sunday
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(startOfWeek);
+    d.setDate(startOfWeek.getDate() + i);
+    const dt = getDayType(d);
+    const isToday = d.toDateString() === TODAY.toDateString();
+    const div = document.createElement('div');
+    div.className = 'week-day' + (isToday ? ' today' : '') + (dt.type.includes('kids') || dt.type === 'transition' ? ' kids-day' : ' free-day-bg');
+    const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const typeIcon = dt.type === 'free' ? '🌿' : dt.type === 'transition' ? '🚌' : '🧒';
+    div.innerHTML = `
+      <div class="week-day-name">${dayNames[d.getDay()]}</div>
+      <div class="week-day-num">${d.getDate()}</div>
+      <div class="week-day-type">${typeIcon}</div>
+    `;
+    el.appendChild(div);
+  }
+}
+
+function renderDailyFocus() {
+  const dt = getDayType(TODAY);
+  const el = document.getElementById('dailyFocusContent');
+  let html = '';
+
+  if (dt.type === 'free') {
+    html = `
+      <p style="font-size: 14px; color: var(--text-mid); margin-bottom: 12px;">Today is wide open. Here's a suggested flow:</p>
+      <div class="routine-block">
+        <h4>🍪 Cookie Business First</h4>
+        <p style="font-size: 13px; color: var(--text-mid);">Baking, orders, content, or outreach — dedicate your first energy block here.</p>
+      </div>
+      <div class="routine-block" style="background: var(--lavender-light);">
+        <h4>🚗 DoorDash Window</h4>
+        <p style="font-size: 13px; color: var(--text-mid);">Lunch or dinner rush. Check your target hours for this week.</p>
+      </div>
+      <div class="routine-block" style="background: var(--peach-light);">
+        <h4>✨ You Time</h4>
+        <p style="font-size: 13px; color: var(--text-mid);">Rest, move your body, OB prep, or a quiet moment with God.</p>
+      </div>
+    `;
+  } else if (dt.type === 'transition') {
+    html = `
+      <p style="font-size: 14px; color: var(--text-mid); margin-bottom: 12px;">Start strong, then pivot to your day:</p>
+      <div class="routine-block">
+        <h4>🚌 Morning Drop-Off Block</h4>
+        <p style="font-size: 13px; color: var(--text-mid);">Get everyone out the door, then come home and reset.</p>
+      </div>
+      <div class="routine-block" style="background: var(--peach-light);">
+        <h4>💼 Hustle Window Opens</h4>
+        <p style="font-size: 13px; color: var(--text-mid);">Use the free block for cookies, coaching outreach, or errands.</p>
+      </div>
+    `;
+  } else {
+    html = `
+      <p style="font-size: 14px; color: var(--text-mid); margin-bottom: 12px;">Kids are with you today. Realistic focus:</p>
+      <div class="routine-block">
+        <h4>☀️ Morning: Get Everyone Ready</h4>
+        <p style="font-size: 13px; color: var(--text-mid);">School run, vitamins, breakfast. Quick wins count.</p>
+      </div>
+      <div class="routine-block" style="background: var(--peach-light);">
+        <h4>💼 Between Runs: Mini Hustle</h4>
+        <p style="font-size: 13px; color: var(--text-mid);">Tackle focused tasks in the windows between pickups.</p>
+      </div>
+      <div class="routine-block" style="background: var(--lavender-light);">
+        <h4>🌙 Evening: Wind Down Together</h4>
+        <p style="font-size: 13px; color: var(--text-mid);">Dinner, routines, connection. You don't have to do it all today.</p>
+      </div>
+    `;
+  }
+  el.innerHTML = html;
+}
+
+// ============================================================
+// COOKIE INCOME EDITOR
+// ============================================================
+function editCookieIncome() {
+  const goal = prompt('Enter weekly income goal:', load('cookieGoalVal', '0'));
+  if (goal !== null) { save('cookieGoalVal', goal); document.getElementById('cookieGoalDisplay').textContent = goal; }
+  const earned = prompt('Enter amount earned this week:', load('cookieEarned', '0'));
+  if (earned !== null) { save('cookieEarnedVal', earned); document.getElementById('cookieEarned').textContent = earned; }
+}
+
+// ============================================================
+// RESTORE ALL STATE
+// ============================================================
+function restoreAll() {
+  // Toggles
+  ['gigiSchool','aces','aftercare','holiday','vitamins','morningWalk','eveningWalk','bettyMeds'].forEach(restoreToggle);
+  restoreAcesLocation();
+
+  // Inputs
+  const inputMap = {
+    'dayWord': 'dayWord', 'dailyGratitude': 'dailyGratitude',
+    'prayerIntentions': 'prayerIntentions',
+    'waterIntake': 'waterIntake', 'sleepHours': 'sleepHours',
+    'workoutLog': 'workoutLog',
+    'grat1': 'grat1', 'grat2': 'grat2', 'grat3': 'grat3',
+    'wellnessWeight': 'wellnessWeight', 'pregWeight': 'pregWeight',
+    'bakingDays': 'bakingDays',
+    'ddHoursGoal': 'ddHoursGoal', 'ddEarningsGoal': 'ddEarningsGoal',
+    'ddHoursActual': 'ddHoursActual', 'ddEarned': 'ddEarned',
+    'ddWindows': 'ddWindows', 'coachingWeekGoal': 'coachingWeekGoal',
+    'meal-mon': 'meal-mon', 'meal-tue': 'meal-tue', 'meal-wed': 'meal-wed',
+    'meal-thu': 'meal-thu', 'meal-fri': 'meal-fri', 'meal-wknd': 'meal-wknd',
+  };
+  Object.entries(inputMap).forEach(([id, key]) => restoreInput(id, key));
+
+  // Editables
+  ['weekdayRoutine','weekendRoutine','bettyMedsList','bettyGrooming'].forEach(id => restoreEditable(id, id));
+
+  // Bible verse
+  const bv = load('bibleVerse');
+  if (bv) document.getElementById('bibleVerse').innerText = bv;
+  const br = load('bibleRef');
+  if (br) document.getElementById('bibleRef').innerText = br;
+
+  // Ideas
+  ['idea-hustle','idea-family','idea-health','idea-spirit','idea-home','idea-hobbies'].forEach(id => restoreEditable(id, id));
+
+  // Cookie income display
+  document.getElementById('cookieGoalDisplay').textContent = load('cookieGoalVal', '0');
+  document.getElementById('cookieEarned').textContent = load('cookieEarned', '0');
+
+  // Scales
+  restoreScale('energy', 'energyScale');
+  restoreScale('nausea', 'nauseaScale');
+  restoreScale('stress', 'stressScale');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  loadAll();
+  initHeader();
+  renderWeekGrid();
+  renderDailyFocus();
+  initPregnancy();
+
+  // Checklists
+  initChecklist('todayTodos', 'todayTodosItems', []);
+  initChecklist('cookieTodos', 'cookieTodosItems', ['Check active orders', 'Post on social media', 'Reply to inquiries']);
+  initChecklist('cookieOrders', 'cookieOrders', []);
+  initChecklist('coachingTodos', 'coachingTodosItems', ['Send 3 DMs', 'Update Instagram bio', 'Follow up with leads']);
+  initChecklist('coachingClients', 'coachingClients', []);
+  renderChoreSchedule();
+  injectTodaysChores();
+  initChecklist('nestingTasks', 'nestingItems', ['Research car seats', 'Set up registry', 'Plan nursery layout', 'Pack hospital bag by 36 weeks']);
+
+  // Log entries
+  renderLogEntries('godMomentsList', 'godMoments', 'var(--peach-deep)');
+  renderLogEntries('answeredPrayersList', 'answeredPrayers', 'var(--sage-deep)');
+  renderQuests();
+  renderWorkoutHistory();
+
+  // Appointments
+  initCalendar();
+  renderAppts('obAppts', 'obAppts', 'var(--rose-deep)');
+  renderAppts('vetAppts', 'vetAppts', 'var(--sage-deep)');
+
+  // Weight chart
+  setTimeout(drawWeightChart, 100);
+
+  restoreAll();
+  initKidsTab();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+window.addEventListener('resize', drawWeightChart);
+// ============================================================
+// FAMILY CALENDAR
+// ============================================================
+let calViewMode = 'month';
+let calViewDate = new Date(TODAY);
+let calSelectedDate = new Date(TODAY);
+
+const CAL_COLORS = {
+  lavender: { bg: 'var(--lavender-light)', dot: 'lavender', text: 'var(--lavender-deep)' },
+  blush:    { bg: 'var(--blush-light)',    dot: 'blush',    text: 'var(--blush-deep)' },
+  sage:     { bg: 'var(--sage-light)',     dot: 'sage',     text: 'var(--sage-deep)' },
+  peach:    { bg: 'var(--peach-light)',    dot: 'peach',    text: 'var(--peach-deep)' },
+  gold:     { bg: 'var(--gold-light)',     dot: 'gold',     text: 'var(--gold-deep)' },
+};
+
+function getEvents() { return load('calEvents', []); }
+function saveEvents(e) { save('calEvents', e); }
+
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function eventsForDate(dateStr) {
+  return getEvents().filter(e => e.date === dateStr).sort((a,b) => (a.time||'').localeCompare(b.time||''));
+}
+
+function addCalEvent() {
+  const dateEl = document.getElementById('newEventDate');
+  const timeEl = document.getElementById('newEventTime');
+  const titleEl = document.getElementById('newEventTitle');
+  const colorEl = document.getElementById('newEventColor');
+  if (!titleEl.value.trim() || !dateEl.value) { 
+    if (!dateEl.value) { alert('Please pick a date!'); } 
+    return; 
+  }
+  const events = getEvents();
+  events.push({
+    id: 'ev' + Date.now(),
+    date: dateEl.value,
+    time: timeEl.value.trim(),
+    title: titleEl.value.trim(),
+    color: colorEl.value
+  });
+  saveEvents(events);
+  titleEl.value = ''; timeEl.value = '';
+  // Set selected date to the new event's date
+  const parts = dateEl.value.split('-');
+  calSelectedDate = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  calViewDate = new Date(calSelectedDate);
+  renderCalendar();
+  renderCalDayDetail();
+}
+
+function deleteCalEvent(id) {
+  const events = getEvents().filter(e => e.id !== id);
+  saveEvents(events);
+  renderCalendar();
+  renderCalDayDetail();
+}
+
+function switchCalView(mode) {
+  calViewMode = mode;
+  document.getElementById('cal-tab-month').classList.toggle('active', mode === 'month');
+  document.getElementById('cal-tab-week').classList.toggle('active', mode === 'week');
+  renderCalendar();
+}
+
+function calNav(dir) {
+  if (calViewMode === 'month') {
+    calViewDate.setMonth(calViewDate.getMonth() + dir);
+  } else {
+    calViewDate.setDate(calViewDate.getDate() + dir * 7);
+  }
+  renderCalendar();
+}
+
+function selectCalDate(dateStr) {
+  const parts = dateStr.split('-');
+  calSelectedDate = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  // Pre-fill the date input
+  const di = document.getElementById('newEventDate');
+  if (di) di.value = dateStr;
+  renderCalendar();
+  renderCalDayDetail();
+}
+
+function renderCalendar() {
+  if (calViewMode === 'month') renderMonthCal();
+  else renderWeekCal();
+}
+
+function renderMonthCal() {
+  const grid = document.getElementById('calGrid');
+  if (!grid) return;
+  const y = calViewDate.getFullYear();
+  const m = calViewDate.getMonth();
+  document.getElementById('calTitle').textContent =
+    calViewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+  const firstDay = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const daysInPrev = new Date(y, m, 0).getDate();
+  const todayStr = dateKey(TODAY);
+  const selStr = dateKey(calSelectedDate);
+
+  let html = '<div class="cal-grid-month">';
+  ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d => {
+    html += `<div class="cal-day-header">${d}</div>`;
+  });
+
+  // Prev month days
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const day = daysInPrev - i;
+    const d = new Date(y, m-1, day);
+    const ds = dateKey(d);
+    const dt = getDayType(d);
+    const bg = dt.type === 'free' ? 'free-bg' : (dt.type !== 'free' ? 'kids-bg' : '');
+    html += `<div class="cal-cell other-month ${bg}" onclick="selectCalDate('${ds}')"><div class="cal-num">${day}</div></div>`;
+  }
+
+  // This month
+  for (let day = 1; day <= daysInMonth; day++) {
+    const d = new Date(y, m, day);
+    const ds = dateKey(d);
+    const dt = getDayType(d);
+    const bg = dt.type === 'free' ? 'free-bg' : 'kids-bg';
+    const isToday = ds === todayStr;
+    const isSel = ds === selStr;
+    const evs = eventsForDate(ds);
+    const dots = evs.slice(0,4).map(e => `<span class="cal-dot ${e.color}"></span>`).join('');
+    html += `<div class="cal-cell ${bg} ${isToday?'today':''} ${isSel&&!isToday?'selected':''}" onclick="selectCalDate('${ds}')">
+      <div class="cal-num">${day}</div>
+      <div>${dots}</div>
+    </div>`;
+  }
+
+  // Next month
+  const total = firstDay + daysInMonth;
+  const remaining = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for (let day = 1; day <= remaining; day++) {
+    const d = new Date(y, m+1, day);
+    const ds = dateKey(d);
+    html += `<div class="cal-cell other-month" onclick="selectCalDate('${ds}')"><div class="cal-num">${day}</div></div>`;
+  }
+
+  html += '</div>';
+  grid.innerHTML = html;
+  renderCalDayDetail();
+}
+
+function renderWeekCal() {
+  const grid = document.getElementById('calGrid');
+  if (!grid) return;
+  // Find Sunday of the week containing calViewDate
+  const dow = calViewDate.getDay();
+  const sunday = new Date(calViewDate);
+  sunday.setDate(calViewDate.getDate() - dow);
+  const todayStr = dateKey(TODAY);
+  const selStr = dateKey(calSelectedDate);
+
+  const month1 = sunday.toLocaleDateString('en-US',{month:'short', day:'numeric'});
+  const sat = new Date(sunday); sat.setDate(sunday.getDate()+6);
+  const month2 = sat.toLocaleDateString('en-US',{month:'short', day:'numeric'});
+  document.getElementById('calTitle').textContent = `${month1} – ${month2}`;
+
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let html = '<div class="cal-week-grid">';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(sunday); d.setDate(sunday.getDate() + i);
+    const ds = dateKey(d);
+    const isToday = ds === todayStr;
+    const isSel = ds === selStr;
+    const dt = getDayType(d);
+    const typeIcon = dt.type === 'free' ? '🌿' : dt.type === 'transition' ? '🚌' : dt.type === 'first-stretch' ? '🔄' : '🧒';
+    const evs = eventsForDate(ds);
+    const evHtml = evs.slice(0,3).map(e => {
+      const c = CAL_COLORS[e.color] || CAL_COLORS.lavender;
+      return `<div class="cal-week-event" style="background:${c.bg};color:${c.text};">${e.time ? e.time+' ' : ''}${e.title}</div>`;
+    }).join('');
+    html += `<div class="cal-week-cell ${isToday?'today':''} ${isSel&&!isToday?'selected':''}" onclick="selectCalDate('${ds}')">
+      <div class="cal-week-day-name">${dayNames[i]}</div>
+      <div class="cal-week-num">${d.getDate()}</div>
+      <div style="text-align:center;font-size:12px;">${typeIcon}</div>
+      <div class="cal-week-events">${evHtml}</div>
+    </div>`;
+  }
+  html += '</div>';
+  grid.innerHTML = html;
+  renderCalDayDetail();
+}
+
+function renderCalDayDetail() {
+  const el = document.getElementById('calDayDetail');
+  if (!el) return;
+  const ds = dateKey(calSelectedDate);
+  const evs = eventsForDate(ds);
+  const label = calSelectedDate.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+  const dt = getDayType(calSelectedDate);
+
+  let html = `<div style="font-size:13px;font-weight:700;color:var(--text-light);margin-bottom:8px;">${label} <span class="tag tag-lavender">${dt.label}</span></div>`;
+
+  if (!evs.length) {
+    html += `<div style="font-size:13px;color:var(--text-light);font-style:italic;">No events — tap a date to view or add events.</div>`;
+  } else {
+    evs.forEach(e => {
+      const c = CAL_COLORS[e.color] || CAL_COLORS.lavender;
+      html += `<div class="cal-event-item" style="background:${c.bg};">
+        <div class="cal-event-dot" style="background:${c.text};"></div>
+        <div class="cal-event-time">${e.time || ''}</div>
+        <div class="cal-event-name">${e.title}</div>
+        <button class="log-delete" onclick="deleteCalEvent('${e.id}')">×</button>
+      </div>`;
+    });
+  }
+  el.innerHTML = html;
+}
+
+function initCalendar() {
+  // Set today as default date in the add-event input
+  const di = document.getElementById('newEventDate');
+  if (di) di.value = dateKey(TODAY);
+  renderCalendar();
+}
+
+// ============================================================
+// SCHEDULED CHORES
+// ============================================================
+const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const DEFAULT_CHORES = [
+  { id:'c1', name:'Dishes', days:[1,2,3,4,5] },
+  { id:'c2', name:'Vacuum', days:[6] },
+  { id:'c3', name:'Laundry', days:[1,4] },
+  { id:'c4', name:'Bathrooms', days:[6] },
+  { id:'c5', name:'Wipe counters', days:[0,3,6] },
+  { id:'c6', name:'Take out trash', days:[0] },
+];
+
+function getChores() {
+  return load('scheduledChores', DEFAULT_CHORES);
+}
+
+function saveChores(chores) {
+  save('scheduledChores', chores);
+}
+
+function toggleDayPill(btn) {
+  btn.classList.toggle('selected');
+}
+
+function addScheduledChore() {
+  const name = document.getElementById('newChoreName').value.trim();
+  if (!name) return;
+  const selectedDays = [...document.querySelectorAll('#newChoreDays .day-pill.selected')].map(b => parseInt(b.dataset.day));
+  if (!selectedDays.length) { alert('Please select at least one day!'); return; }
+  const chores = getChores();
+  chores.push({ id: 'c' + Date.now(), name, days: selectedDays });
+  saveChores(chores);
+  document.getElementById('newChoreName').value = '';
+  document.querySelectorAll('#newChoreDays .day-pill').forEach(b => b.classList.remove('selected'));
+  renderChoreSchedule();
+  injectTodaysChores();
+}
+
+function deleteScheduledChore(id) {
+  const chores = getChores().filter(c => c.id !== id);
+  saveChores(chores);
+  renderChoreSchedule();
+  injectTodaysChores();
+}
+
+function renderChoreSchedule() {
+  const el = document.getElementById('choreScheduleList');
+  if (!el) return;
+  const chores = getChores();
+  el.innerHTML = '';
+  if (!chores.length) {
+    el.innerHTML = '<div class="empty-state"><span class="empty-icon">🧹</span>No chores yet!</div>';
+    return;
+  }
+  chores.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'chore-item';
+    const dayLabels = c.days.sort((a,b)=>a-b).map(d => DAY_NAMES[d]).join(', ');
+    div.innerHTML = `
+      <div style="flex:1;">
+        <div style="font-size:14px; color:var(--text-mid); font-weight:600;">${c.name}</div>
+        <div class="chore-days-display">📅 ${dayLabels}</div>
+      </div>
+      <button class="check-delete" onclick="deleteScheduledChore('${c.id}')">×</button>
+    `;
+    el.appendChild(div);
+  });
+}
+
+function injectTodaysChores() {
+  const todayDow = TODAY.getDay();
+  const chores = getChores();
+  const todaysChores = chores.filter(c => c.days.includes(todayDow));
+  if (!todaysChores.length) return;
+
+  // Get existing today todos and add any missing chore todos
+  const items = load('todayTodosItems', []);
+  let changed = false;
+  todaysChores.forEach(c => {
+    const choreKey = '🧹 ' + c.name;
+    const alreadyExists = items.some(i => i.text === choreKey);
+    if (!alreadyExists) {
+      items.push({ text: choreKey, done: false, isChore: true });
+      changed = true;
+    }
+  });
+  if (changed) {
+    save('todayTodosItems', items);
+    renderChecklist('todayTodosItems');
+  }
+}
+
+// ============================================================
+// KIDS TAB
+// ============================================================
+function switchKidTab(tab) {
+  ['gigi','leo','routines'].forEach(t => {
+    document.getElementById('kid-panel-' + t).style.display = t === tab ? 'block' : 'none';
+    document.getElementById('kid-tab-' + t).classList.toggle('active', t === tab);
+  });
+  if (tab === 'routines') renderAllRoutines();
+}
+
+// Safe Foods
+const FOOD_CAT_ICONS = {
+  protein:'🥩', carb:'🍞', fruit:'🍓', veggie:'🥦', dairy:'🧀', snack:'🍿', drink:'🥤'
+};
+
+function addSafeFood(child) {
+  const inputId = 'new' + (child==='gigi'?'Gigi':'Leo') + 'Food';
+  const catId   = 'new' + (child==='gigi'?'Gigi':'Leo') + 'FoodCat';
+  const input = document.getElementById(inputId);
+  const cat   = document.getElementById(catId);
+  if (!input || !input.value.trim()) return;
+  const key = child + 'SafeFoods';
+  const foods = load(key, []);
+  foods.push({ id: 'f'+Date.now(), name: input.value.trim(), cat: cat.value });
+  save(key, foods);
+  input.value = '';
+  renderSafeFoods(child);
+}
+
+function deleteSafeFood(child, id) {
+  const key = child + 'SafeFoods';
+  const foods = load(key, []).filter(f => f.id !== id);
+  save(key, foods);
+  renderSafeFoods(child);
+}
+
+function renderSafeFoods(child) {
+  const containerId = child + 'SafeFoods';
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const foods = load(child + 'SafeFoods', []);
+  el.innerHTML = '';
+  if (!foods.length) {
+    el.innerHTML = '<div class="empty-state"><span class="empty-icon">🥗</span>No safe foods added yet!</div>';
+    return;
+  }
+  // Group by category
+  const cats = ['protein','carb','fruit','veggie','dairy','snack','drink'];
+  cats.forEach(cat => {
+    const group = foods.filter(f => f.cat === cat);
+    if (!group.length) return;
+    const label = document.createElement('div');
+    label.className = 'food-group-label';
+    label.textContent = FOOD_CAT_ICONS[cat] + ' ' + cat.charAt(0).toUpperCase() + cat.slice(1) + 's';
+    el.appendChild(label);
+    const row = document.createElement('div');
+    row.style.display = 'flex';
+    row.style.flexWrap = 'wrap';
+    group.forEach(f => {
+      const tag = document.createElement('span');
+      tag.className = 'food-tag food-cat-' + cat;
+      tag.innerHTML = `${f.name} <button onclick="deleteSafeFood('${child}','${f.id}')" title="Remove">×</button>`;
+      row.appendChild(tag);
+    });
+    el.appendChild(row);
+  });
+}
+
+function initKidsTab() {
+  renderSafeFoods('gigi');
+  renderSafeFoods('leo');
+  // Restore editables
+  ['gigiNotes','gigiGeneralNotes','leoSchoolNotes','leoGeneralNotes'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const val = load(id);
+    if (val) el.innerText = val;
+  });
+}
+
+// ============================================================
+// CUSTOM ROUTINES
+// ============================================================
+const ROUTINE_COLORS = [
+  {accent:'accent-blush', border:'var(--blush-deep)', bg:'var(--blush-light)'},
+  {accent:'accent-lavender', border:'var(--lavender-deep)', bg:'var(--lavender-light)'},
+  {accent:'accent-sage', border:'var(--sage-deep)', bg:'var(--sage-light)'},
+  {accent:'accent-peach', border:'var(--peach-deep)', bg:'var(--peach-light)'},
+  {accent:'accent-gold', border:'var(--gold-deep)', bg:'var(--gold-light)'},
+  {accent:'accent-mint', border:'var(--mint-deep)', bg:'var(--mint-light)'},
+];
+
+const DEFAULT_ROUTINES = [
+  {
+    id: 'r1', name: 'Weekday Routine', emoji: '📚', colorIdx: 0,
+    steps: [
+      {time:'6:30', text:'Wake up, breakfast'},
+      {time:'7:00', text:'Get dressed, pack bags'},
+      {time:'7:30', text:'Morning school run'},
+      {time:'3:30', text:'School / ACES pickup'},
+      {time:'4:00', text:'Snack + homework'},
+      {time:'6:00', text:'Dinner'},
+      {time:'7:30', text:'Showers / baths'},
+      {time:'8:00', text:'Reading, wind-down'},
+      {time:'8:30', text:'Lights out'},
+    ]
+  },
+  {
+    id: 'r2', name: 'Weekend / Holiday', emoji: '🌈', colorIdx: 1,
+    steps: [
+      {time:'', text:'Wake up naturally'},
+      {time:'', text:'Cozy breakfast together'},
+      {time:'', text:'PJs until we feel like it 🌸'},
+      {time:'12:00', text:'Activity or outing'},
+      {time:'', text:'Free play, creative time'},
+      {time:'', text:'Screen time window'},
+      {time:'6:00', text:'Family dinner'},
+      {time:'', text:'Movie or game night'},
+    ]
+  }
+];
+
+function getRoutines() {
+  return load('customRoutines', DEFAULT_ROUTINES);
+}
+
+function saveRoutines(routines) {
+  save('customRoutines', routines);
+}
+
+function renderAllRoutines() {
+  const container = document.getElementById('routinesContainer');
+  if (!container) return;
+  const routines = getRoutines();
+  container.innerHTML = '';
+  routines.forEach((r, ri) => {
+    const color = ROUTINE_COLORS[r.colorIdx % ROUTINE_COLORS.length];
+    const card = document.createElement('div');
+    card.className = 'card ' + color.accent;
+    card.style.marginBottom = '16px';
+    card.innerHTML = `
+      <div class="card-header" style="margin-bottom:10px;">
+        <div class="card-icon">${r.emoji}</div>
+        <div style="flex:1;">
+          <input type="text" value="${r.name}" 
+            style="font-family:'Playfair Display',serif; font-size:18px; font-weight:600; color:var(--text-dark); border:none; background:transparent; outline:none; width:100%; padding:0;"
+            onchange="renameRoutine('${r.id}', this.value)"
+            placeholder="Routine name...">
+        </div>
+        <div style="display:flex; gap:6px; align-items:center;">
+          <select onchange="changeRoutineEmoji('${r.id}', this.value)" style="border:none; background:transparent; font-size:20px; cursor:pointer; padding:0; width:36px;">
+            ${['📚','🌈','🌙','☀️','🧁','🏃','🛁','🎮','📖','🌿','💪','✨'].map(e => `<option value="${e}" ${e===r.emoji?'selected':''}>${e}</option>`).join('')}
+          </select>
+          <button class="btn btn-sm" style="background:var(--blush-light);color:var(--blush-deep);" onclick="deleteRoutine('${r.id}')">🗑</button>
+        </div>
+      </div>
+      <div id="steps-${r.id}"></div>
+      <div class="add-row" style="margin-top:10px;">
+        <input type="text" id="stepTime-${r.id}" placeholder="Time" style="max-width:80px;">
+        <input type="text" id="stepText-${r.id}" placeholder="Add a step..." style="flex:1;" onkeydown="if(event.key==='Enter')addRoutineStep('${r.id}')">
+        <button class="btn btn-soft btn-sm" onclick="addRoutineStep('${r.id}')">+ Step</button>
+      </div>
+    `;
+    container.appendChild(card);
+    renderRoutineSteps(r.id);
+  });
+}
+
+function renderRoutineSteps(routineId) {
+  const routines = getRoutines();
+  const r = routines.find(x => x.id === routineId);
+  if (!r) return;
+  const container = document.getElementById('steps-' + routineId);
+  if (!container) return;
+  container.innerHTML = '';
+  if (!r.steps.length) {
+    container.innerHTML = '<div class="empty-state" style="padding:12px;"><span class="empty-icon">✨</span>Add your first step!</div>';
+    return;
+  }
+  r.steps.forEach((step, si) => {
+    const div = document.createElement('div');
+    div.className = 'check-item';
+    div.style.alignItems = 'center';
+    div.innerHTML = `
+      <div style="display:flex; gap:6px; flex:1; align-items:center;">
+        <input type="text" value="${step.time||''}" placeholder="Time"
+          style="width:70px; font-size:12px; font-weight:700; color:var(--text-light); padding:4px 8px; flex-shrink:0;"
+          onchange="updateStep('${routineId}',${si},'time',this.value)">
+        <input type="text" value="${step.text}" placeholder="Step..."
+          style="flex:1; font-size:14px; color:var(--text-mid); padding:4px 8px; background:transparent;"
+          onchange="updateStep('${routineId}',${si},'text',this.value)">
+      </div>
+      <div style="display:flex; gap:4px;">
+        <button class="check-delete" onclick="moveStep('${routineId}',${si},-1)" title="Move up" style="font-size:12px;">↑</button>
+        <button class="check-delete" onclick="moveStep('${routineId}',${si},1)" title="Move down" style="font-size:12px;">↓</button>
+        <button class="check-delete" onclick="deleteStep('${routineId}',${si})">×</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function addRoutineStep(routineId) {
+  const timeEl = document.getElementById('stepTime-' + routineId);
+  const textEl = document.getElementById('stepText-' + routineId);
+  if (!textEl || !textEl.value.trim()) return;
+  const routines = getRoutines();
+  const r = routines.find(x => x.id === routineId);
+  if (!r) return;
+  r.steps.push({ time: timeEl.value.trim(), text: textEl.value.trim() });
+  saveRoutines(routines);
+  timeEl.value = ''; textEl.value = '';
+  renderRoutineSteps(routineId);
+}
+
+function updateStep(routineId, stepIdx, field, value) {
+  const routines = getRoutines();
+  const r = routines.find(x => x.id === routineId);
+  if (!r || !r.steps[stepIdx]) return;
+  r.steps[stepIdx][field] = value;
+  saveRoutines(routines);
+}
+
+function moveStep(routineId, stepIdx, dir) {
+  const routines = getRoutines();
+  const r = routines.find(x => x.id === routineId);
+  if (!r) return;
+  const newIdx = stepIdx + dir;
+  if (newIdx < 0 || newIdx >= r.steps.length) return;
+  [r.steps[stepIdx], r.steps[newIdx]] = [r.steps[newIdx], r.steps[stepIdx]];
+  saveRoutines(routines);
+  renderRoutineSteps(routineId);
+}
+
+function deleteStep(routineId, stepIdx) {
+  const routines = getRoutines();
+  const r = routines.find(x => x.id === routineId);
+  if (!r) return;
+  r.steps.splice(stepIdx, 1);
+  saveRoutines(routines);
+  renderRoutineSteps(routineId);
+}
+
+function renameRoutine(routineId, name) {
+  const routines = getRoutines();
+  const r = routines.find(x => x.id === routineId);
+  if (!r) return;
+  r.name = name;
+  saveRoutines(routines);
+}
+
+function changeRoutineEmoji(routineId, emoji) {
+  const routines = getRoutines();
+  const r = routines.find(x => x.id === routineId);
+  if (!r) return;
+  r.emoji = emoji;
+  saveRoutines(routines);
+  renderAllRoutines();
+}
+
+function deleteRoutine(routineId) {
+  if (!confirm('Delete this routine?')) return;
+  const routines = getRoutines().filter(r => r.id !== routineId);
+  saveRoutines(routines);
+  renderAllRoutines();
+}
+
+function addNewRoutine() {
+  const routines = getRoutines();
+  const newRoutine = {
+    id: 'r' + Date.now(),
+    name: 'New Routine',
+    emoji: '✨',
+    colorIdx: routines.length % ROUTINE_COLORS.length,
+    steps: []
+  };
+  routines.push(newRoutine);
+  saveRoutines(routines);
+  renderAllRoutines();
+  // Scroll to new routine
+  setTimeout(() => {
+    const cards = document.querySelectorAll('#routinesContainer .card');
+    if (cards.length) cards[cards.length-1].scrollIntoView({behavior:'smooth'});
+  }, 100);
+}
+
+</script>
+</body>
+</html>

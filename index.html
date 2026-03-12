@@ -1357,11 +1357,16 @@
         <button class="btn btn-primary btn-sm" onclick="addCalEvent()" style="margin-top:10px;">+ Add to Calendar</button>
       </div>
     </div>
-  </section>
+    <div class="divider"></div>
+<!-- Kids + Betty sub-tabs -->
+<div class="pill-tabs" style="margin-bottom:20px;">
+  <button class="pill-tab active" id="subtab-family" onclick="switchFamilySub('kids')">👧🏻 Kids</button>
+  <button class="pill-tab" id="subtab-betty" onclick="switchFamilySub('betty')">🐾 Betty</button>
+</div>
 
-  <!-- ===== KIDS ===== -->
-  <section id="kids" class="section">
-    <h2 class="section-header">👧🏻 Kids</h2>
+<!-- Family sub-section containers -->
+<div id="family-kids-panel">
+   <h2 class="section-header">👧🏻 Kids</h2>
 
     <!-- Child sub-tabs -->
     <div class="pill-tabs" style="margin-bottom:20px;">
@@ -1513,6 +1518,68 @@ Pickup time (aftercare): ___________
       <div id="routinesContainer"></div>
       <button class="btn btn-primary" onclick="addNewRoutine()" style="margin-bottom: 20px;">+ New Routine</button>
     </div>
+</div>
+<div id="family-betty-panel" style="display:none;">
+  <h2 class="section-header">🐾 Betty</h2>
+
+    <div class="card accent-peach">
+      <span class="betty-emoji">🐕</span>
+      <div class="toggle-row">
+        <span class="toggle-label">🦮 Morning walk done</span>
+        <div class="toggle" id="tog-morningWalk" onclick="toggleSwitch(this, 'morningWalk')"></div>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">🌅 Evening walk done</span>
+        <div class="toggle" id="tog-eveningWalk" onclick="toggleSwitch(this, 'eveningWalk')"></div>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">💊 Medications given</span>
+        <div class="toggle" id="tog-bettyMeds" onclick="toggleSwitch(this, 'bettyMeds')"></div>
+      </div>
+    </div>
+
+    <div class="card accent-lavender">
+      <div class="card-header">
+        <div class="card-icon">💊</div>
+        <div><div class="card-title">Medications & Supplements</div></div>
+      </div>
+      <div contenteditable="true" class="editable-area" id="bettyMedsList" oninput="save('bettyMedsList', this.innerText)">
+Add Betty's medications here...
+      </div>
+    </div>
+
+    <div class="card accent-sage">
+      <div class="card-header">
+        <div class="card-icon">🏥</div>
+        <div><div class="card-title">Vet Appointments</div></div>
+      </div>
+      <div id="vetAppts"></div>
+      <div class="add-row">
+        <input type="text" id="newVetDate" placeholder="Date" style="max-width: 100px;">
+        <input type="text" id="newVetAppt" placeholder="e.g. Annual checkup..." style="flex: 1;">
+        <button class="btn btn-soft btn-sm" onclick="addVetAppt()">+ Add</button>
+      </div>
+    </div>
+
+    <div class="card accent-blush">
+      <div class="card-header">
+        <div class="card-icon">✂️</div>
+        <div><div class="card-title">Grooming Schedule</div></div>
+      </div>
+      <div contenteditable="true" class="editable-area" id="bettyGrooming" oninput="save('bettyGrooming', this.innerText)">
+Last grooming: 
+Next grooming: 
+Groomer contact: 
+Notes:
+      </div>
+    </div>
+</div>
+
+  </section>
+
+  <!-- ===== KIDS ===== -->
+  <section id="kids" class="section">
+   
 
   </section>
 
@@ -1738,59 +1805,7 @@ Pickup time (aftercare): ___________
 
   <!-- ===== BETTY ===== -->
   <section id="betty" class="section">
-    <h2 class="section-header">🐾 Betty</h2>
-
-    <div class="card accent-peach">
-      <span class="betty-emoji">🐕</span>
-      <div class="toggle-row">
-        <span class="toggle-label">🦮 Morning walk done</span>
-        <div class="toggle" id="tog-morningWalk" onclick="toggleSwitch(this, 'morningWalk')"></div>
-      </div>
-      <div class="toggle-row">
-        <span class="toggle-label">🌅 Evening walk done</span>
-        <div class="toggle" id="tog-eveningWalk" onclick="toggleSwitch(this, 'eveningWalk')"></div>
-      </div>
-      <div class="toggle-row">
-        <span class="toggle-label">💊 Medications given</span>
-        <div class="toggle" id="tog-bettyMeds" onclick="toggleSwitch(this, 'bettyMeds')"></div>
-      </div>
-    </div>
-
-    <div class="card accent-lavender">
-      <div class="card-header">
-        <div class="card-icon">💊</div>
-        <div><div class="card-title">Medications & Supplements</div></div>
-      </div>
-      <div contenteditable="true" class="editable-area" id="bettyMedsList" oninput="save('bettyMedsList', this.innerText)">
-Add Betty's medications here...
-      </div>
-    </div>
-
-    <div class="card accent-sage">
-      <div class="card-header">
-        <div class="card-icon">🏥</div>
-        <div><div class="card-title">Vet Appointments</div></div>
-      </div>
-      <div id="vetAppts"></div>
-      <div class="add-row">
-        <input type="text" id="newVetDate" placeholder="Date" style="max-width: 100px;">
-        <input type="text" id="newVetAppt" placeholder="e.g. Annual checkup..." style="flex: 1;">
-        <button class="btn btn-soft btn-sm" onclick="addVetAppt()">+ Add</button>
-      </div>
-    </div>
-
-    <div class="card accent-blush">
-      <div class="card-header">
-        <div class="card-icon">✂️</div>
-        <div><div class="card-title">Grooming Schedule</div></div>
-      </div>
-      <div contenteditable="true" class="editable-area" id="bettyGrooming" oninput="save('bettyGrooming', this.innerText)">
-Last grooming: 
-Next grooming: 
-Groomer contact: 
-Notes:
-      </div>
-    </div>
+    
   </section>
 
   <!-- ===== IDEAS BANK ===== -->

@@ -3340,5 +3340,12 @@ function addNewRoutine() {
 }
 
 </script>
+  function switchFamilySub(sub) {
+  document.getElementById('family-kids-panel').style.display = (sub === 'kids') ? 'block' : 'none';
+  document.getElementById('family-betty-panel').style.display = (sub === 'betty') ? 'block' : 'none';
+  document.getElementById('subtab-family').classList.toggle('active', sub === 'kids');
+  document.getElementById('subtab-betty').classList.toggle('active', sub === 'betty');
+}
+
 </body>
 </html>
